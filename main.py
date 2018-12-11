@@ -7,7 +7,6 @@ dp = DataProcessing(news_file='./style_recognition/datasets/news.txt',
                     papers_file='./style_recognition/datasets/paper.txt',
                     pre_processing=False)
 
-
 data = dp.news_data + dp.papers_data
 class2index, index2class = dp.class2index, dp.index2class 
 
