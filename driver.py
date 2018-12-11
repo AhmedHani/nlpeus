@@ -12,6 +12,6 @@ class2index, index2class = dp.class2index, dp.index2class
 
 batcher = Batcher(data=data, batch_size=64, with_shuffle=True, divide_train_valid_test=True)
 
-#experiment = Experiment()
+experiment = Experiment()
 
 
