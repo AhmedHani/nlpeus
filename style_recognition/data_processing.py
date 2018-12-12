@@ -9,15 +9,7 @@ class DataProcessing(object):
         self.news_data = self.__read_news_file(news_file, pre_processing)
         self.papers_data = self.__read_papers_file(papers_file, pre_processing)
         
-        self.index2class, self.class2index = {0: 'news', 1: 'papers'}, {'news': 0, 'papers': 1}
-
-    def analyze(self, outpath='./outs/analysis.log'):
-        self.dataset_analyzer = TextDatasetAnalyzer(self.news_data + self.papers_data, 
-                                                    data_axis={'text': 0, 'label': 1},
-                                                    index2class=self.index2class,
-                                                    outpath=outpath)
-
-        self.dataset_analyzer.all()
+        self.index2class, self.class2index = {0: 'news', 1: 'papers'}, {'news': 0, 'papers': 1}        
 
     @staticmethod
     def __read_news_file(news_file, pre_processing):

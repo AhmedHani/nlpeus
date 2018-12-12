@@ -435,6 +435,32 @@ class TextDatasetAnalyzer:
         freqs_format = '\n'.join(['\t\t' + key + ': ' + str(value) for key, value in words])
         self.out.write('words frequencies: \n{}\n\n'.format(freqs_format))
     
+    def get_words_ids(self):
+        word2index, index2word = {}, {}
+        index = 0 
+
+        for sentence in self.data:
+            for word in sentence.split():
+                if word not in word2index:
+                    word2index[word] = index
+                    index2word[index] = word
+
+                    index += 1
+        
+        return word2index, index2word
+    
+    def get_words_freqs(self):
+        words = {}
+
+        for sentence in self.data:
+            for word in sentence.split():
+                if word in words:
+                    words[word] += 1
+                else:
+                    words[word] = 1
+        
+        return words
+    
     def chars_freqs(self):
         chars = {}
 
@@ -449,6 +475,32 @@ class TextDatasetAnalyzer:
 
         freqs_format = '\n'.join(['\t\t' + key + ': ' + str(value) for key, value in chars])
         self.out.write('chars frequencies: \n{}\n\n'.format(freqs_format))
+    
+    def get_chars_ids(self):
+        char2index, index2char = {}, {}
+        index = 0 
+
+        for sentence in self.data:
+            for char in list(sentence):
+                if char not in char2index:
+                    char2index[char] = index
+                    index2char[index] = char
+
+                    index += 1
+        
+        return char2index, index2char
+    
+    def get_chars_freqs(self):
+        chars = {}
+
+        for sentence in self.data:
+            for char in list(sentence):
+                if char in chars:
+                    chars[char] += 1
+                else:
+                    chars[char] = 1
+        
+        return chars
 
     def n_samples_per_class(self):
         classes = Counter(self.labels).most_common(len(self.labels))
