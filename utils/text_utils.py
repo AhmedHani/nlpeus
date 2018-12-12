@@ -5,7 +5,6 @@ import os
 import codecs
 import sys
 from collections import Counter
-from models.torch_fb_infersent import InferSent
 
 
 class Preprocessor:
@@ -526,6 +525,8 @@ class TextEncoder(object):
         if isinstance(modelname, str):
             if modelname == 'char_one_hot':
                 self.model = _CharOneHotLoader(char2indexes)
+            elif modelname == 'char_index':
+                self.model = _CharIndexLoader(char2indexes)
             elif modelname == 'word_one_hot':
                 self.model = _WordOneHotLoader(vocab2indexes)
             elif modelname == 'char_embedding':
@@ -780,4 +781,45 @@ class _CharOneHotLoader(object):
     def __len__(self):
         return self.char_size
 
+
+class _CharIndexLoader(object):
+
+    def __init__(self, char2indexes):
+        self.char2indexes = char2indexes
+        self.char_size = len(char2indexes)
+
+    def encode(self, text):
+        if isinstance(text, list):
+            text_matrix = []
+
+            for sentence in text:
+                chars_tokens = list(sentence)
+                sentence_matrix = []
+
+                for char in chars_tokens:
+                    idx = self[char]
+
+                    sentence_matrix.append(idx)
+
+                text_matrix.append(sentence_matrix)
+
+            return text_matrix
+        else:
+            sentence_matrix = []
+
+            for char in list(text):
+                idx = self[char]
+
+                sentence_matrix.append(idx)
+
+            return sentence_matrix
+
+    def __getitem__(self, item):
+        if item in self.char2indexes:
+            return self.char2indexes[item]
+        else:
+            return 0
+
+    def __len__(self):
+        return self.char_size
 

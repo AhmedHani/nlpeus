@@ -1,6 +1,6 @@
 author: A.H. Al-Ghidani
 project: style_recognition
-date and time: 2018-12-12 14:03
+date and time: 2018-12-12 14:34
 
 experiment setup:
 	 total training samples: 172831

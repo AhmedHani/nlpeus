@@ -76,7 +76,7 @@ pickle_file_path = experiment.pickle_file_path
 learning_curve_image = experiment.learning_curve_image
 
 trainer = Trainer(model, classes=[class2index, index2class])
-text_encoder = TextEncoder(char2indexes=char2index, modelname='char_one_hot')
+text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
 transformations = [functools.partial(Preprocessor.char_based_pad, size=max_charslen),
                    functools.partial(Preprocessor.chat_based_truncate, size=max_charslen)]
 

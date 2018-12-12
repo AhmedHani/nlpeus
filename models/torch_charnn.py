@@ -30,7 +30,7 @@ class CharRNN(nn.Module):
         self.to(device)
 
     def forward(self, input):
-        input = torch.FloatTensor(input).to(self.device)
+        input = torch.LongTensor(input).to(self.device)
         batch_size = input.size(0)
 
         encoded = self.encoder(input)
