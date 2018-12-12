@@ -1,7 +1,7 @@
 from utils.eval_utils import Evaluator
 
 
-class Trainer(object):
+class SupervisedTrainer(object):
 
     def __init__(self, model, classes):
         self.model = model
