@@ -1,10 +1,12 @@
 import argparse
 
-from style_recognition.data_processing import DataProcessing
+from models.torch_charnn import CharRNN
+from style_recognition.research.data_processing import DataProcessing
+from style_recognition.research.trainer import Trainer
 from utils.data_utils import Batcher
 from utils.experiment_utils import Experiment
-from models.torch_charnn import CharRNN
-from utils.text_utils import Preprocessor, TextDatasetAnalyzer, TextAnalyzer
+from utils.text_utils import TextDatasetAnalyzer
+from utils.text_utils import TextEncoder
 
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
@@ -36,16 +38,14 @@ class2index, index2class = dp.class2index, dp.index2class
 
 dataset_analyzer = TextDatasetAnalyzer(data=data, data_axis={'text': 0, 'label': 1},
                                        index2class=index2class,
-                                       outpath='./style_recognition/outs/all_data_analysis.log')
+                                       outpath='./style_recognition/datasets/all_data_analysis.log')
 
 dataset_analyzer.all()
 del dataset_analyzer
 
 batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
-dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, 
-                                       data_axis={'text': 0, 'label': 1},
-                                       index2class=index2class,
-                                       outpath='./style_recognition/outs/train_data_analysis.log')
+dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text': 0, 'label': 1},
+                                       index2class=index2class, outpath='stdout')
 
 char2index, index2char = dataset_analyzer.get_chars_ids()
 chars_freqs = dataset_analyzer.get_chars_freqs()
@@ -57,8 +57,6 @@ experiment = Experiment(
     total_training_samples=batcher.total_train_samples,
     total_valid_samples=batcher.total_valid_samples,
     total_test_samples=batcher.total_test_samples,
-    model=model,
-    batcher=batcher,
     model_name=model.__class__.__name__,
     epochs=epochs,
     batch_size=batch_size,
@@ -67,3 +65,15 @@ experiment = Experiment(
     device=device,
     author_name='A.H. Al-Ghidani'
 )
+
+experiment_name = experiment.create(__file__)
+saved_model_path = experiment.saved_model_dir
+saved_data_path = experiment.saved_data_dir
+eval_file_path = experiment.eval_file_path
+pickle_file_path = experiment.pickle_file_path
+learning_curve_image = experiment.learning_curve_image
+
+trainer = Trainer(model, classes=[class2index, index2class])
+text_encoder = TextEncoder(char2indexes=char2index, modelname='char_one_hot')
+
+experiment.run(trainer, batcher, encoder=text_encoder.encode, data_axis={'X': 0, 'Y': 1})

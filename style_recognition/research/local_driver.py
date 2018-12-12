@@ -1,7 +1,5 @@
-from style_recognition.data_processing import DataProcessing
+from style_recognition.research.data_processing import DataProcessing
 from utils.data_utils import Batcher
-from utils.experiment_utils import Experiment
-
 
 dp = DataProcessing(news_file='./style_recognition/datasets/news.txt',
                     papers_file='./style_recognition/datasets/paper.txt',

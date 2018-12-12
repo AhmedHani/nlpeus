@@ -5,6 +5,7 @@ import os
 import codecs
 import sys
 from collections import Counter
+from models.torch_fb_infersent import InferSent
 
 
 class Preprocessor:
@@ -189,12 +190,12 @@ class TextAnalyzer:
                   n_unique_chars=True,
                   words_freqs=True,
                   chars_freqs=True):
-        average_words = 0
+        average_words, average_chars = 0, 0
         words, chars = {}, {}
 
         for sentence in self.data:
             sentence_tokens = sentence.split()
-            chars_tokens = list(sentence_tokens)
+            chars_tokens = list(sentence)
             
             average_words += len(sentence_tokens)
             average_chars += len(chars_tokens)
@@ -519,10 +520,40 @@ class TextDatasetAnalyzer:
         return codecs.open(outpath, 'w', encoding='utf-8')
 
 
-class TextEncoder:
+class TextEncoder(object):
 
-    @staticmethod
-    def word_based_embedding(text, embedding_model, flatten=False):
+    def __init__(self, vocab2indexes=None, char2indexes=None, modelname='char_one_hot'):
+        self.vocab2indexes = vocab2indexes
+
+        if isinstance(modelname, str):
+            if modelname == 'char_one_hot':
+                self.model = _CharOneHotLoader(char2indexes)
+            elif modelname == 'word_one_hot':
+                self.model = _WordOneHotLoader(vocab2indexes)
+            elif modelname == 'char_embedding':
+                self.model = _CharEmbeddingLoader(modelname)
+            else:
+                self.model = _WordEmbeddingLoader(modelname)
+        else:
+            import inspect
+
+            if isinstance(modelname, object) or inspect.isclass(modelname):
+                self.model = modelname
+
+    def encode(self, text, flatten=False):
+        return self.model.encode(text, flatten)
+
+
+class _WordEmbeddingLoader(object):
+
+    def __init__(self, model_name):
+        self.__models = ('word2vec', 'fasttext', 'glove')
+
+        assert model_name in self.__models
+
+        self.__load_embeddings(model_name)
+
+    def encode(self, text, flatten=False):
         if isinstance(text, list):
             sentences_vectors = []
 
@@ -532,10 +563,7 @@ class TextEncoder:
                 sentence_matrix = []
 
                 for word in sentence_tokens:
-                    if word in embedding_model:
-                        vec = embedding_model[word]
-                    else:
-                        vec = embedding_model['unk']
+                    vec = self[word]
 
                     sentence_matrix.append(vec)
 
@@ -546,16 +574,12 @@ class TextEncoder:
 
             return sentences_vectors
         else:
-            sentences_vectors = []
             sentence_tokens = text.split()
 
             sentence_matrix = []
 
             for word in sentence_tokens:
-                if word in embedding_model:
-                    vec = embedding_model[word]
-                else:
-                    vec = embedding_model['unk']
+                vec = self[word]
 
                 sentence_matrix.append(vec)
 
@@ -563,27 +587,185 @@ class TextEncoder:
                 sentence_matrix = sum(sentence_matrix, [])
 
             return sentence_matrix
-    
+
+    def __load_embeddings(self, model_name):
+        # floydhub input path support
+
+        if model_name == 'word2vec':
+            try:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_word2vec_model(
+                    './data_utils/GoogleNews-vectors-negative300.bin')
+            except:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_word2vec_model(
+                    '../input/word2vecgooglenewsvectors/GoogleNews-vectors-negative300.bin')
+        elif model_name == 'fasttext':
+            try:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                    './data_utils/crawl-300d-2M.vec')
+            except:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                    '../input/fasttextcrawl300d2m/crawl-300d-2M.vec')
+        elif model_name == 'glove':
+            try:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                    './data_utils/glove.6B.300d.txt')
+            except:
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                    '../input/glove6b/glove.6B.300d.txt')
+
+        print(model_name, "Loaded!")
+        print('Vocab Size', self.__vocab_size)
+        print('Embedding Dim', self.__embedding_size)
+
     @staticmethod
-    def char_based_embedding(text, embedding_model, flatten=False):
+    def __load_word2vec_model(fname):
+        import numpy as np
+
+        word_vecs = {}
+
+        with open(fname, "rb") as f:
+            header = f.readline()
+            vocab_size, layer1_size = map(int, header.split())
+            binary_len = np.dtype('float32').itemsize * layer1_size
+
+            for line in range(vocab_size):
+                word = []
+                while True:
+                    ch = f.read(1).decode('latin-1')
+                    if ch == ' ':
+                        word = ''.join(word)
+                        break
+                    if ch != '\n':
+                        word.append(ch)
+
+                word_vecs[word] = np.fromstring(f.read(binary_len), dtype='float32')
+
+        return word_vecs, vocab_size, layer1_size
+
+    @staticmethod
+    def __load_fasttext_model(fname):
+        word_vecs = {}
+
+        with open(fname, 'r') as reader:
+            for line in reader:
+                if vocab_size == -1:
+                    vocab_size, embedding_size = line.strip().rstrip().split()
+                    continue
+
+                line = line.strip().rstrip()
+
+                if line == "":
+                    continue
+
+                line_tokens = line.split(" ")
+                word = str(line_tokens[0])
+                vec = list(map(lambda v: float(v), line_tokens[1:]))
+
+                if word not in word_vecs:
+                    word_vecs[word] = vec
+
+                embedding_size = len(vec)
+
+        return word_vecs, vocab_size, embedding_size
+
+    def __getitem__(self, item):
+        if item in self.__model:
+            return self.__model[item]
+        else:
+            vec = [0.0] * self.__embedding_size
+
+            return vec
+
+    def __len__(self):
+        return len(self.__model)
+
+
+class _WordOneHotLoader(object):
+
+    def __init__(self, word2indexes):
+        self.word2indexes = word2indexes
+        self.word_size = len(word2indexes)
+        self.temp_vec = self.__one_hot_vec(self.word_size)
+
+    def encode(self, text, flatten):
+        if isinstance(text, list):
+            text_matrix = []
+
+            for sentence in text:
+                sentence_matrix = []
+
+                for word in sentence.split():
+                    vec = self[word]
+
+                    sentence_matrix.append(vec)
+
+                if flatten:
+                    sentence_matrix = sum(sentence_matrix, [])
+
+                text_matrix.append(sentence_matrix)
+
+            return text_matrix
+        else:
+            sentence_matrix = []
+
+            for word in text.split():
+                vec = self[word]
+
+                sentence_matrix.append(vec)
+
+            if flatten:
+                sentence_matrix = sum(sentence_matrix, [])
+
+            return sentence_matrix
+
+    @staticmethod
+    def __one_hot_vec(word_size):
+        return [0.0] * word_size
+
+    def __getitem__(self, item):
+        import copy as cp
+
+        if item in self.word2indexes:
+            vec = cp.deepcopy(self.temp_vec)
+            vec[self.word2indexes[item]] = 1.0
+
+            return vec
+        else:
+            return self.temp_vec
+
+    def __len__(self):
+        return self.word_size
+
+
+class _CharEmbeddingLoader(object):
+
+    def __init__(self, *args):
+        self.args = args
+
+
+class _CharOneHotLoader(object):
+
+    def __init__(self, char2indexes):
+        self.char2indexes = char2indexes
+        self.char_size = len(char2indexes)
+        self.temp_vec = self.__one_hot_vec(self.char_size)
+
+    def encode(self, text, flatten):
         if isinstance(text, list):
             text_matrix = []
 
             for sentence in text:
                 chars_tokens = list(sentence)
                 sentence_matrix = []
-            
+
                 for char in chars_tokens:
-                    if char in embedding_model:
-                        vec = embedding_model[char]
-                    else:
-                        vec = embedding_model['*']
-                
+                    vec = self[char]
+
                     sentence_matrix.append(vec)
-            
+
                 if flatten:
                     sentence_matrix = sum(sentence_matrix, [])
-    
+
                 text_matrix.append(sentence_matrix)
 
             return text_matrix
@@ -591,21 +773,31 @@ class TextEncoder:
             sentence_matrix = []
 
             for char in list(text):
-                if char in embedding_model:
-                    vec = embedding_model[char]
-                else:
-                    vec = embedding_model['*']
-                
+                vec = self[char]
+
                 sentence_matrix.append(vec)
-        
+
             if flatten:
                 sentence_matrix = sum(sentence_matrix, [])
-        
+
             return sentence_matrix
 
     @staticmethod
-    def sentence_based_embedding(text, inference_func):
-        if isinstance(text, list):
-            return [inference_func(sentence) for sentence in text]
-        
-        return inference_func(text)
+    def __one_hot_vec(char_size):
+        return [0.0] * char_size
+
+    def __getitem__(self, item):
+        import copy as cp
+
+        if item in self.char2indexes:
+            vec = cp.deepcopy(self.temp_vec)
+            vec[self.char2indexes[item]] = 1.0
+
+            return vec
+        else:
+            return self.temp_vec
+
+    def __len__(self):
+        return self.char_size
+
+
