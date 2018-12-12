@@ -42,7 +42,7 @@ class CharRNN(nn.Module):
         return output, hidden
 
     def predict_classes(self, input):
-        input = torch.FloatTensor(input).to(self.device)
+        input = torch.LongTensor(input).to(self.device)
 
         batch_size = input.size(0)
 
@@ -55,7 +55,7 @@ class CharRNN(nn.Module):
         return output.max(1)[1].data.numpy()
 
     def predict_probs(self, input):
-        input = torch.FloatTensor(input).to(self.device)
+        input = torch.LongTensor(input).to(self.device)
         batch_size = input.size(0)
 
         encoded = self.encoder(input)
@@ -84,7 +84,7 @@ class CharRNN(nn.Module):
         self.zero_grad()
         loss = self.loss_function(prediction, target)
 
-        loss_value = loss.data[0]
+        loss_value = loss.item()
         loss.backward()
 
         return float(loss_value)
