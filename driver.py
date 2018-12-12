@@ -2,7 +2,7 @@ import argparse
 
 from models.torch_charnn import CharRNN
 from style_recognition.research.data_processing import DataProcessing
-from style_recognition.research.trainer import Trainer
+from style_recognition.research.trainer import SupervisedTrainer
 from utils.data_utils import Batcher
 from utils.experiment_utils import Experiment
 from utils.text_utils import TextDatasetAnalyzer
@@ -70,7 +70,7 @@ experiment = Experiment(
 
 experiment.create(local_driver_file)
 
-trainer = Trainer(model, classes=[class2index, index2class])
+trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
 transformations = [functools.partial(Preprocessor.char_based_pad, size=max_charslen),
                    functools.partial(Preprocessor.chat_based_truncate, size=max_charslen)]
