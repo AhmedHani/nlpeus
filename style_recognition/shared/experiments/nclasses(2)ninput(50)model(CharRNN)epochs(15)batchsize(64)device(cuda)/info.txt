@@ -1,6 +1,6 @@
 author: A.H. Al-Ghidani
 project: style_recognition
-date and time: 2018-12-12 14:44
+date and time: 2018-12-12 14:48
 
 experiment setup:
 	 total training samples: 172831
@@ -8,7 +8,7 @@ experiment setup:
 	 total testing samples: 21603
 	 model: CharRNN
 	 epochs: 15
-	 batch size: 16
+	 batch size: 64
 	 number of classes: 2
-	 input length: 70
+	 input length: 50
 	 device: cuda

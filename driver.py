@@ -13,9 +13,9 @@ from style_recognition.research.local_driver import __file__ as local_driver_fil
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
-parser.add_argument('--batch_size', type=int, default=16, help='training batch size')
+parser.add_argument('--batch_size', type=int, default=64, help='training batch size')
 parser.add_argument('--epochs', type=int, default=15, help='number of training epochs')
-parser.add_argument('--max-charslen', type=int, default=70, help='max chars length that will be fed to the network')
+parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
@@ -52,7 +52,7 @@ dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text
 char2index, index2char = dataset_analyzer.get_chars_ids()
 chars_freqs = dataset_analyzer.get_chars_freqs()
 
-model = CharRNN(input_size=len(char2index), output_size=len(class2index) - 1)
+model = CharRNN(input_size=len(char2index), output_size=len(class2index))
 
 experiment = Experiment(
     total_samples=len(data),
@@ -68,12 +68,7 @@ experiment = Experiment(
     author_name='A.H. Al-Ghidani'
 )
 
-experiment_name = experiment.create(local_driver_file)
-saved_model_path = experiment.saved_model_dir
-saved_data_path = experiment.saved_data_dir
-eval_file_path = experiment.eval_file_path
-pickle_file_path = experiment.pickle_file_path
-learning_curve_image = experiment.learning_curve_image
+experiment.create(local_driver_file)
 
 trainer = Trainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')

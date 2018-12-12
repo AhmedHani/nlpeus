@@ -116,7 +116,7 @@ class Experiment(object):
 
         return self.experiment_dir
 
-    def run(self, trainer, batcher, encoder,  data_axis, transformations=None, class2index=None):
+    def run(self, trainer, batcher, encoder, data_axis, transformations=None, class2index=None):
 
         try:
             epochs_average_losses = []
@@ -137,7 +137,7 @@ class Experiment(object):
                     x_train = encoder.encode(X)
 
                     if class2index is None:
-                        y_train = [[item] for item in Y]
+                        y_train = Y
                     else:
                         y_train = [[class2index[item]] for item in Y]
 
@@ -178,7 +178,11 @@ class Experiment(object):
                 X = [item[data_axis['X']] for item in current_batch]
                 Y = [item[data_axis['Y']] for item in current_batch]
 
-                x_valid= encoder(X)
+                if transformations is not None:
+                    for transformation in transformations:
+                        X = transformation(X)
+
+                x_valid = encoder.encode(X)
 
                 if class2index is None:
                     y_valid = Y
