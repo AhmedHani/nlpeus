@@ -41,7 +41,7 @@ dataset_analyzer = TextDatasetAnalyzer(data=data, data_axis={'text': 0, 'label':
 dataset_analyzer.all()
 del dataset_analyzer
 
-batcher = Batcher(data=data, batch_size=64, with_shuffle=True, divide_train_valid_test=True)
+batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, 
                                        data_axis={'text': 0, 'label': 1},
                                        index2class=index2class,
