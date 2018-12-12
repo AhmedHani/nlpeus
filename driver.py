@@ -27,8 +27,6 @@ min_wordsfreq = args.min_wordsfreq
 min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
 
-
-
 dp = DataProcessing(news_file='./style_recognition/datasets/news.txt',
                     papers_file='./style_recognition/datasets/paper.txt',
                     pre_processing=False)
@@ -42,7 +40,6 @@ dataset_analyzer = TextDatasetAnalyzer(data=data, data_axis={'text': 0, 'label':
 
 dataset_analyzer.all()
 del dataset_analyzer
-
 
 batcher = Batcher(data=data, batch_size=64, with_shuffle=True, divide_train_valid_test=True)
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, 
@@ -70,6 +67,3 @@ experiment = Experiment(
     device=device,
     author_name='A.H. Al-Ghidani'
 )
-
-
-
