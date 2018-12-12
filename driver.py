@@ -6,7 +6,9 @@ from style_recognition.research.trainer import Trainer
 from utils.data_utils import Batcher
 from utils.experiment_utils import Experiment
 from utils.text_utils import TextDatasetAnalyzer
-from utils.text_utils import TextEncoder
+from utils.text_utils import TextEncoder, Preprocessor
+import functools
+from style_recognition.research.local_driver import __file__ as local_driver_file
 
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
@@ -36,12 +38,12 @@ dp = DataProcessing(news_file='./style_recognition/datasets/news.txt',
 data = dp.news_data + dp.papers_data
 class2index, index2class = dp.class2index, dp.index2class
 
-dataset_analyzer = TextDatasetAnalyzer(data=data, data_axis={'text': 0, 'label': 1},
-                                       index2class=index2class,
-                                       outpath='./style_recognition/datasets/all_data_analysis.log')
+#dataset_analyzer = TextDatasetAnalyzer(data=data, data_axis={'text': 0, 'label': 1},
+#                                       index2class=index2class,
+#                                       outpath='./style_recognition/datasets/all_data_analysis.log')
 
-dataset_analyzer.all()
-del dataset_analyzer
+#dataset_analyzer.all()
+#del dataset_analyzer
 
 batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text': 0, 'label': 1},
@@ -66,7 +68,7 @@ experiment = Experiment(
     author_name='A.H. Al-Ghidani'
 )
 
-experiment_name = experiment.create(__file__)
+experiment_name = experiment.create(local_driver_file)
 saved_model_path = experiment.saved_model_dir
 saved_data_path = experiment.saved_data_dir
 eval_file_path = experiment.eval_file_path
@@ -75,5 +77,7 @@ learning_curve_image = experiment.learning_curve_image
 
 trainer = Trainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_one_hot')
+transformations = [functools.partial(Preprocessor.char_based_pad, size=max_charslen),
+                   functools.partial(Preprocessor.chat_based_truncate, size=max_charslen)]
 
-experiment.run(trainer, batcher, encoder=text_encoder.encode, data_axis={'X': 0, 'Y': 1})
+experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})

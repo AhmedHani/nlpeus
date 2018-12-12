@@ -40,7 +40,15 @@ class Experiment(object):
 
     def create(self, research_interface):
         project_dir = os.path.dirname(os.path.dirname(research_interface))
+
+        if not os.path.exists(os.path.join(project_dir, 'shared')):
+            os.mkdir(os.path.join(project_dir, 'shared'))
+
         experiment_resources = os.path.join(project_dir, 'shared')
+
+        if not os.path.exists(os.path.join(experiment_resources, 'experiments')):
+            os.mkdir(os.path.join(experiment_resources, 'experiments'))
+
         experiment_resources = os.path.join(experiment_resources, 'experiments')
 
         experiment_name = 'nclasses({})ninput({})model({})epochs({})batchsize({})device({})'.format(
@@ -67,7 +75,7 @@ class Experiment(object):
                 else:
                     print('write a suffix for the new experiment name')
                     answer = str(input())
-                    experiment_dir = os.path.join(experiment_resources, experiment_name + '_{}'.format(answer))
+                    self.experiment_dir = os.path.join(experiment_resources, experiment_name + '_{}'.format(answer))
             else:
                 print('experiment will be terminated')
                 exit()
@@ -108,7 +116,7 @@ class Experiment(object):
 
         return self.experiment_dir
 
-    def run(self, trainer, batcher, encoder, data_axis, class2index=None):
+    def run(self, trainer, batcher, encoder,  data_axis, transformations=None, class2index=None):
 
         try:
             epochs_average_losses = []
@@ -122,7 +130,11 @@ class Experiment(object):
                     X = [item[data_axis['X']] for item in current_batch]
                     Y = [item[data_axis['Y']] for item in current_batch]
 
-                    x_train = encoder(X)
+                    if transformations is not None:
+                        for transformation in transformations:
+                            X = transformation(X)
+
+                    x_train = encoder.encode(X)
 
                     if class2index is None:
                         y_train = Y

@@ -30,7 +30,7 @@ class CharRNN(nn.Module):
         self.to(device)
 
     def forward(self, input):
-        input = torch.from_numpy(input).to(self.device)
+        input = torch.FloatTensor(input).to(self.device)
         batch_size = input.size(0)
 
         encoded = self.encoder(input)
@@ -42,7 +42,7 @@ class CharRNN(nn.Module):
         return output, hidden
 
     def predict_classes(self, input):
-        input = torch.from_numpy(input).to(self.device)
+        input = torch.FloatTensor(input).to(self.device)
 
         batch_size = input.size(0)
 
@@ -55,7 +55,7 @@ class CharRNN(nn.Module):
         return output.max(1)[1].data.numpy()
 
     def predict_probs(self, input):
-        input = torch.from_numpy(input).to(self.device)
+        input = torch.FloatTensor(input).to(self.device)
         batch_size = input.size(0)
 
         encoded = self.encoder(input)

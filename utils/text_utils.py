@@ -171,7 +171,7 @@ class Preprocessor:
 
         for i, sentence in enumerate(sentences):
             sentence_tokens = list(sentence)
-            sentences[i] = ' '.join(sentence_tokens[0:size])
+            sentences[i] = ''.join(sentence_tokens[0:size])
 
         return sentences
 
@@ -523,8 +523,6 @@ class TextDatasetAnalyzer:
 class TextEncoder(object):
 
     def __init__(self, vocab2indexes=None, char2indexes=None, modelname='char_one_hot'):
-        self.vocab2indexes = vocab2indexes
-
         if isinstance(modelname, str):
             if modelname == 'char_one_hot':
                 self.model = _CharOneHotLoader(char2indexes)
@@ -540,8 +538,8 @@ class TextEncoder(object):
             if isinstance(modelname, object) or inspect.isclass(modelname):
                 self.model = modelname
 
-    def encode(self, text, flatten=False):
-        return self.model.encode(text, flatten)
+    def encode(self, text):
+        return self.model.encode(text)
 
 
 class _WordEmbeddingLoader(object):
@@ -553,7 +551,7 @@ class _WordEmbeddingLoader(object):
 
         self.__load_embeddings(model_name)
 
-    def encode(self, text, flatten=False):
+    def encode(self, text):
         if isinstance(text, list):
             sentences_vectors = []
 
@@ -567,9 +565,6 @@ class _WordEmbeddingLoader(object):
 
                     sentence_matrix.append(vec)
 
-                if flatten:
-                    sentence_matrix = sum(sentence_matrix, [])
-
                 sentences_vectors.append(sentence_matrix)
 
             return sentences_vectors
@@ -582,9 +577,6 @@ class _WordEmbeddingLoader(object):
                 vec = self[word]
 
                 sentence_matrix.append(vec)
-
-            if flatten:
-                sentence_matrix = sum(sentence_matrix, [])
 
             return sentence_matrix
 
@@ -687,7 +679,7 @@ class _WordOneHotLoader(object):
         self.word_size = len(word2indexes)
         self.temp_vec = self.__one_hot_vec(self.word_size)
 
-    def encode(self, text, flatten):
+    def encode(self, text):
         if isinstance(text, list):
             text_matrix = []
 
@@ -699,9 +691,6 @@ class _WordOneHotLoader(object):
 
                     sentence_matrix.append(vec)
 
-                if flatten:
-                    sentence_matrix = sum(sentence_matrix, [])
-
                 text_matrix.append(sentence_matrix)
 
             return text_matrix
@@ -712,9 +701,6 @@ class _WordOneHotLoader(object):
                 vec = self[word]
 
                 sentence_matrix.append(vec)
-
-            if flatten:
-                sentence_matrix = sum(sentence_matrix, [])
 
             return sentence_matrix
 
@@ -750,7 +736,7 @@ class _CharOneHotLoader(object):
         self.char_size = len(char2indexes)
         self.temp_vec = self.__one_hot_vec(self.char_size)
 
-    def encode(self, text, flatten):
+    def encode(self, text):
         if isinstance(text, list):
             text_matrix = []
 
@@ -763,9 +749,6 @@ class _CharOneHotLoader(object):
 
                     sentence_matrix.append(vec)
 
-                if flatten:
-                    sentence_matrix = sum(sentence_matrix, [])
-
                 text_matrix.append(sentence_matrix)
 
             return text_matrix
@@ -776,9 +759,6 @@ class _CharOneHotLoader(object):
                 vec = self[char]
 
                 sentence_matrix.append(vec)
-
-            if flatten:
-                sentence_matrix = sum(sentence_matrix, [])
 
             return sentence_matrix
 

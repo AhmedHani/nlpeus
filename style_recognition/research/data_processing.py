@@ -17,6 +17,8 @@ class DataProcessing(object):
 
         with codecs.open(news_file, 'r', encoding='utf-8') as reader:
             for line in reader:
+                line = line.strip().rstrip()
+
                 if pre_processing:
                     line = Preprocessor.normalize_text(line)
                     line = Preprocessor.replace_apostrophes(line)
@@ -32,6 +34,8 @@ class DataProcessing(object):
 
         with codecs.open(papers_file, 'r', encoding='utf-8') as reader:
             for line in reader:
+                line = line.strip().rstrip()
+
                 if pre_processing:
                     line = Preprocessor.normalize_text(line)
                     line = Preprocessor.replace_apostrophes(line)
