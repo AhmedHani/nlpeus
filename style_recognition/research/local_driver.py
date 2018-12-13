@@ -22,7 +22,6 @@ from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools
 
-
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
 parser.add_argument('--batch_size', type=int, default=64, help='training batch size')

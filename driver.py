@@ -78,7 +78,7 @@ experiment = Experiment(
     author_name='A.H. Al-Ghidani'
 )
 
-experiment.create(__file__)
+experiment.create('./style_recognition/research/local_driver.py')
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
