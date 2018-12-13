@@ -1,3 +1,4 @@
+```
 author: A.H. Al-Ghidani
 project: style_recognition
 date and time: 2018-12-13 14:02
@@ -41,3 +42,5 @@ accuracy: 0.984
 +-----------+--------------------+--------------------+
 
 average fscore: 0.9839118196087607
+
+```
