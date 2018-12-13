@@ -24,8 +24,8 @@ import functools
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
-parser.add_argument('--batch_size', type=int, default=64, help='training batch size')
-parser.add_argument('--epochs', type=int, default=15, help='number of training epochs')
+parser.add_argument('--batch_size', type=int, default=128, help='training batch size')
+parser.add_argument('--epochs', type=int, default=2, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
@@ -60,7 +60,7 @@ batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_tr
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text': 0, 'label': 1},
                                        index2class=index2class, outpath='stdout')
 
-char2index, index2char = dataset_analyzer.get_chars_ids()
+char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 model = CharRNN(input_size=len(char2index), output_size=len(class2index))
 
 experiment = Experiment(
