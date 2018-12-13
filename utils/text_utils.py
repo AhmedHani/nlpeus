@@ -424,11 +424,18 @@ class TextDatasetAnalyzer:
 
         for sentence in self.data:
             for word in sentence.split():
-                if word not in word2index and min_freqs is not None and words_freqs[word] >= min_freqs:
-                    word2index[word] = index
-                    index2word[index] = word
+                if word not in word2index:
+                    if min_freqs is not None:
+                        if words_freqs[word] >= min_freqs:
+                            word2index[word] = index
+                            index2word[index] = word
 
-                    index += 1            
+                            index += 1
+                    else:
+                        word2index[word] = index
+                        index2word[index] = word
+
+                        index += 1           
             
         return word2index, index2word
 
@@ -443,11 +450,18 @@ class TextDatasetAnalyzer:
 
         for sentence in self.data:
             for char in list(sentence):
-                if char not in char2index and min_freqs is not None and chars_freqs[char] >= min_freqs:
-                    char2index[char] = index
-                    index2char[index] = char
+                if char not in char2index:
+                    if min_freqs is not None:
+                        if chars_freqs[char] >= min_freqs:
+                            char2index[char] = index
+                            index2char[index] = char
 
-                    index += 1
+                            index += 1
+                    else:
+                        char2index[char] = index
+                        index2char[index] = char
+
+                        index += 1
         
         return char2index, index2char
 

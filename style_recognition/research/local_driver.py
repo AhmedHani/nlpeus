@@ -62,8 +62,6 @@ dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text
                                        index2class=index2class, outpath='stdout')
 
 char2index, index2char = dataset_analyzer.get_chars_ids()
-chars_freqs = dataset_analyzer.get_chars_freqs()
-
 model = CharRNN(input_size=len(char2index), output_size=len(class2index))
 
 experiment = Experiment(
