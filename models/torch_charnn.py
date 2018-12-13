@@ -1,3 +1,9 @@
+__author__ = "Ahmed H. Al-Ghidani"
+__copyright__ = "Copyright 2018, The nlpeus Project"
+__license__ = "GPL"
+__maintainer__ = "Ahmed H. Al-Ghidani"
+__email__ = "ahmed.hani.ibrahim@gmail.com"
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
