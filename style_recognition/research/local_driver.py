@@ -22,6 +22,7 @@ from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools
 
+
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
 parser.add_argument('--batch_size', type=int, default=128, help='training batch size')
@@ -61,7 +62,7 @@ dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text
                                        index2class=index2class, outpath='stdout')
 
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
-model = CharRNN(input_size=len(char2index), output_size=len(class2index))
+model = CharRNN(input_size=len(char2index), output_size=len(class2index), device=device)
 
 experiment = Experiment(
     total_samples=len(data),

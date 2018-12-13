@@ -110,7 +110,7 @@ class Preprocessor:
         return _clean(text)
     
     @staticmethod
-    def word_based_pad(sentences_list, size=None, token='<PAD>'):
+    def word_based_pad(sentences_list, size=None, token='pad'):
         sentences = cp.deepcopy(sentences_list)
 
         if size is None:
@@ -419,7 +419,7 @@ class TextDatasetAnalyzer:
         if min_freqs is not None:
             words_freqs = self.get_words_freqs()
             
-        word2index, index2word = {}, {}
+        word2index, index2word = {'pad': 0}, {0: 'pad'}
         index = 1
 
         for sentence in self.data:
@@ -445,7 +445,7 @@ class TextDatasetAnalyzer:
         if min_freqs is not None:
             chars_freqs = self.get_chars_freqs()
 
-        char2index, index2char = {}, {}
+        char2index, index2char = {'#': 0}, {0: '#'}
         index = 1 
 
         for sentence in self.data:

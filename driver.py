@@ -61,7 +61,7 @@ batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_tr
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text': 0, 'label': 1},
                                        index2class=index2class, outpath='stdout')
 
-char2index, index2char = dataset_analyzer.get_chars_ids()
+char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 model = CharRNN(input_size=len(char2index), output_size=len(class2index))
 
 experiment = Experiment(
