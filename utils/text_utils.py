@@ -1,9 +1,11 @@
+
+
+import os
 import re
+import sys
+import codecs
 import copy as cp
 from functools import reduce
-import os
-import codecs
-import sys
 from collections import Counter
 
 
@@ -25,15 +27,8 @@ class Preprocessor:
     
     @staticmethod
     def replace_apostrophes(text):
-        apostrophes_mapping = {
-            '\'s': ' is',
-            '\'ve': ' have',
-            'n\'t': ' not',
-            '\'d': ' would',
-            '\'m': ' am',
-            '\'ll': ' will',
-            '\'re': ' are'
-        }
+        apostrophes_mapping = {'\'s': ' is', '\'ve': ' have', 'n\'t': ' not', '\'d': ' would', 
+                                '\'m': ' am', '\'ll': ' will', '\'re': ' are'}
 
         # elegant! https://stackoverflow.com/a/9479972
         if isinstance(text, list):
@@ -58,36 +53,19 @@ class Preprocessor:
     @staticmethod
     def remove_stop_words(text):
         nltk_stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll",
-                            "you'd", 'your',
-                            'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers',
-                            'herself', 'it',
-                            "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who',
-                            'whom', 'this',
-                            'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-                            'have', 'has', 'had',
-                            'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because',
-                            'as',
-                            'until',
-                            'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through',
-                            'during',
-                            'before',
-                            'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under',
-                            'again',
-                            'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both',
-                            'each', 'few',
-                            'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than',
-                            'too', 'very',
-                            's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm',
-                            'o',
-                            're', 've',
-                            'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn',
-                            "hadn't", 'hasn',
-                            "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't",
-                            'needn',
-                            "needn't",
-                            'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
-                            'wouldn',
-                            "wouldn't", 'I']
+                            "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 
+                            'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 
+                            'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 
+                            'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 
+                            'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 
+                            'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 
+                            'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 
+                            'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 
+                            'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 
+                            'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 
+                            'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', 
+                            "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 
+                            'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't", 'I']
 
         if isinstance(text, list):
             return [' '.join([word for word in one.split() if word not in nltk_stop_words]) for one in text]
@@ -182,13 +160,8 @@ class TextAnalyzer:
 
         self.out = self.__set_output_location(outpath)
     
-    def all(self, n_instances=True,
-                  avg_n_words=True, 
-                  avg_n_chars=True,
-                  n_unique_words=True,
-                  n_unique_chars=True,
-                  words_freqs=True,
-                  chars_freqs=True):
+    def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
+                  n_unique_chars=True, words_freqs=True, chars_freqs=True):
         average_words, average_chars = 0, 0
         words, chars = {}, {}
 
@@ -326,14 +299,8 @@ class TextDatasetAnalyzer:
 
         self.out = self.__set_output_location(outpath)
     
-    def all(self, n_instances=True,
-                  avg_n_words=True, 
-                  avg_n_chars=True,
-                  n_unique_words=True,
-                  n_unique_chars=True,
-                  words_freqs=True,
-                  chars_freqs=True,
-                  n_samples_per_class=True):
+    def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
+                  n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True):
         average_words, average_chars = 0, 0
         words, chars = {}, {}
 
@@ -435,20 +402,44 @@ class TextDatasetAnalyzer:
         freqs_format = '\n'.join(['\t\t' + key + ': ' + str(value) for key, value in words])
         self.out.write('words frequencies: \n{}\n\n'.format(freqs_format))
     
-    def get_words_ids(self):
+    def get_words_ids(self, min_freqs=None):
+        words_freqs = None
+
+        if min_freqs is not None:
+            words_freqs = self.get_words_freqs()
+            
         word2index, index2word = {}, {}
         index = 0 
 
         for sentence in self.data:
             for word in sentence.split():
-                if word not in word2index:
+                if word not in word2index and min_freqs is not None and words_freqs[word] >= min_freqs:
                     word2index[word] = index
                     index2word[index] = word
 
+                    index += 1            
+            
+        return word2index, index2word
+
+    def get_chars_ids(self, min_freqs=None):
+        chars_freqs = None
+
+        if min_freqs is not None:
+            chars_freqs = self.get_chars_freqs()
+
+        char2index, index2char = {}, {}
+        index = 0 
+
+        for sentence in self.data:
+            for char in list(sentence):
+                if char not in char2index and min_freqs is not None and chars_freqs[char] >= min_freqs:
+                    char2index[char] = index
+                    index2char[index] = char
+
                     index += 1
         
-        return word2index, index2word
-    
+        return char2index, index2char
+
     def get_words_freqs(self):
         words = {}
 
@@ -475,20 +466,6 @@ class TextDatasetAnalyzer:
 
         freqs_format = '\n'.join(['\t\t' + key + ': ' + str(value) for key, value in chars])
         self.out.write('chars frequencies: \n{}\n\n'.format(freqs_format))
-    
-    def get_chars_ids(self):
-        char2index, index2char = {}, {}
-        index = 0 
-
-        for sentence in self.data:
-            for char in list(sentence):
-                if char not in char2index:
-                    char2index[char] = index
-                    index2char[index] = char
-
-                    index += 1
-        
-        return char2index, index2char
     
     def get_chars_freqs(self):
         chars = {}
@@ -688,9 +665,7 @@ class _WordOneHotLoader(object):
                 sentence_matrix = []
 
                 for word in sentence.split():
-                    vec = self[word]
-
-                    sentence_matrix.append(vec)
+                    sentence_matrix.append(self[word])
 
                 text_matrix.append(sentence_matrix)
 
@@ -699,9 +674,7 @@ class _WordOneHotLoader(object):
             sentence_matrix = []
 
             for word in text.split():
-                vec = self[word]
-
-                sentence_matrix.append(vec)
+                sentence_matrix.append(self[word])
 
             return sentence_matrix
 
@@ -727,7 +700,7 @@ class _WordOneHotLoader(object):
 class _CharEmbeddingLoader(object):
 
     def __init__(self, *args):
-        self.args = args
+        pass
 
 
 class _CharOneHotLoader(object):
@@ -742,13 +715,10 @@ class _CharOneHotLoader(object):
             text_matrix = []
 
             for sentence in text:
-                chars_tokens = list(sentence)
                 sentence_matrix = []
 
-                for char in chars_tokens:
-                    vec = self[char]
-
-                    sentence_matrix.append(vec)
+                for char in list(sentence):
+                    sentence_matrix.append(self[char])
 
                 text_matrix.append(sentence_matrix)
 
@@ -757,9 +727,7 @@ class _CharOneHotLoader(object):
             sentence_matrix = []
 
             for char in list(text):
-                vec = self[char]
-
-                sentence_matrix.append(vec)
+                sentence_matrix.append(self[char])
 
             return sentence_matrix
 
@@ -793,13 +761,10 @@ class _CharIndexLoader(object):
             text_matrix = []
 
             for sentence in text:
-                chars_tokens = list(sentence)
                 sentence_matrix = []
 
-                for char in chars_tokens:
-                    idx = self[char]
-
-                    sentence_matrix.append(idx)
+                for char in list(sentence):
+                    sentence_matrix.append(self[char])
 
                 text_matrix.append(sentence_matrix)
 
@@ -808,9 +773,7 @@ class _CharIndexLoader(object):
             sentence_matrix = []
 
             for char in list(text):
-                idx = self[char]
-
-                sentence_matrix.append(idx)
+                sentence_matrix.append(self[char])
 
             return sentence_matrix
 
