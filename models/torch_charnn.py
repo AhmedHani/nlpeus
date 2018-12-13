@@ -34,7 +34,7 @@ class CharRNN(nn.Module):
 
         self.decoder = nn.Linear(hidden_size, output_size)
 
-        self.loss = nn.NLLLoss()
+        self.loss = nn.BCELoss()
         self.optimzer = optim.Adam(self.parameters(), lr=1e-3)
 
         self.device = device
@@ -50,34 +50,27 @@ class CharRNN(nn.Module):
         output, hidden = self.rnn(encoded, self.init_hidden(batch_size))
 
         output = self.decoder(hidden[0].view(hidden[0].size(1), hidden[0].size(2)))
-        output = F.log_softmax(output, dim=1)
+        output = F.sigmoid(output)
 
         return output, hidden
 
     def predict_classes(self, input):
-        input = torch.LongTensor(input).to(self.device)
+        output = self.forward(input)[0]
 
-        batch_size = input.size(0)
+        output = output.cpu().data.numpy()
+        output = output.flatten()
+        output[output >= 0.5] = 1
+        output[output < 0.5] = 0
 
-        encoded = self.encoder(input)
-        output, hidden = self.rnn(encoded, self.init_hidden(batch_size))
-
-        output = self.decoder(hidden[0].view(hidden[0].size(1), hidden[0].size(2)))
-        output = F.log_softmax(output, dim=1)
-
-        return output.max(1)[1].data.numpy()
+        return output
 
     def predict_probs(self, input):
-        input = torch.LongTensor(input).to(self.device)
-        batch_size = input.size(0)
+        output = self.forward(input)[0]
 
-        encoded = self.encoder(input)
-        output, hidden = self.rnn(encoded, self.init_hidden(batch_size))
+        output = output.cpu().data.numpy()
+        output = output.flatten()
 
-        output = self.decoder(hidden[0].view(hidden[0].size(1), hidden[0].size(2)))
-        output = F.softmax(output, dim=1)
-
-        return output.max(1)[0].data.numpy()
+        return output
 
     def init_hidden(self, batch_size):
         weight = next(self.parameters()).data
@@ -86,7 +79,7 @@ class CharRNN(nn.Module):
                 Variable(weight.new(self.n_layers, batch_size, self.hidden_size).zero_()))
 
     def loss_function(self, predicted, target):
-        target = torch.LongTensor(target)
+        target = torch.FloatTensor(target).to(self.device)
 
         return self.loss(predicted, target)
 
@@ -108,6 +101,6 @@ class CharRNN(nn.Module):
         return True
 
     def load_weights(self, path):
-        self.load_state_dict(torch.load(path, map_location='cpu'))
+        self.load_state_dict(torch.load(path, map_location=self.device))
 
         return True
