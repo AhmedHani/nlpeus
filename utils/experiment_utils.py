@@ -17,6 +17,7 @@ import shutil
 import codecs
 import datetime
 import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 
 
 class Experiment(object):
