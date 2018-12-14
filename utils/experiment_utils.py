@@ -177,7 +177,7 @@ class Experiment(object):
                 time.sleep(3)
 
                 batcher.initialize()
-                batcher.shuffle_me('train')
+                # batcher.shuffle_me('train')
         except KeyboardInterrupt:
             print('End training at epoch: {}'.format(epoch))
             print('Begin evaluating the model on the validation data')
