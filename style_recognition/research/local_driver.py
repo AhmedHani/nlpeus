@@ -80,7 +80,7 @@ experiment = Experiment(
 
 experiment.create(__file__)
 experiment.save_misc(fmt='json', style2index=class2index, index2style=index2class)
-exit()
+
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
 transformations = [functools.partial(Preprocessor.char_based_pad, size=max_charslen),
