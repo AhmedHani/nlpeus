@@ -40,7 +40,7 @@ class Evaluator:
             print('\n')
 
             if conf_matrix:
-                print('confusion matrix')
+                print('confusion matrix\n')
 
                 cm_headings = ['--'] + ['class ' + str(i) for i in range(len(index2class))]
                 table_data = [cm_headings]
@@ -105,7 +105,7 @@ class Evaluator:
             writer.write('\n\n')
 
             if conf_matrix:
-                writer.write('confusion matrix')
+                writer.write('confusion matrix\n')
 
                 cm_headings = ['--'] + ['class ' + str(i) for i in range(len(index2class))]
                 table_data = [cm_headings]

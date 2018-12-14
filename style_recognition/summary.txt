@@ -1,4 +1,3 @@
-```
 ########### Experiment #1 ###########
 
 author: A.H. Al-Ghidani
@@ -91,4 +90,5 @@ accuracy: 0.984
 
 average fscore: 0.9839118196087607
 
-```
+
+

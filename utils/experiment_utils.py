@@ -231,11 +231,12 @@ class ExperimentSummarizer(object):
 
     def __init__(self, experiments_location):
         self.experiments_location = experiments_location
+        self.output_location = os.path.dirname(os.path.dirname(os.path.dirname(self.experiments_location)))
         self.project_name = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(self.experiments_location)))).upper()
 
     def run(self):
-        summary_file = os.path.join(self.experiments_location, 'summary.txt')
-        sheet_file = os.path.join(self.experiments_location, 'experiments.xlsx')
+        summary_file = os.path.join(self.output_location, 'summary.txt')
+        sheet_file = os.path.join(self.output_location, 'experiments.xlsx')
 
         experiments_data = []
 
@@ -252,6 +253,10 @@ class ExperimentSummarizer(object):
 
                 with codecs.open(experiment_info_file, 'r', encoding='utf-8') as reader:
                     writer.write('########### Experiment #{} ###########\n\n'.format(i + 1))
+                    writer.write(reader.read())
+                    writer.write('\n\n')
+                
+                with codecs.open(experiment_eval_file, 'r', encoding='utf-8') as reader:
                     writer.write(reader.read())
                     writer.write('\n\n')
                 
