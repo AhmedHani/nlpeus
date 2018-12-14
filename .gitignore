@@ -3,8 +3,7 @@
 *.pkl
 *.pt
 *.png
-experiments/
-!experiments/summary.txt
+experiments/*/
 __pycache__
 .DS_Store
 .floydexpt
