@@ -1,9 +1,13 @@
 .idea
 *.pyc
 *.pkl
+*.pt
+*.png
+experiments/
+!experiments/*.txt
+!experiments/*.xlsx
 __pycache__
 .DS_Store
-experiments/
 .floydexpt
 .floydignore
 floyd.yml
