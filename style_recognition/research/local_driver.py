@@ -17,7 +17,7 @@ from models.torch_charnn import CharRNN
 from style_recognition.research.data_processing import DataProcessing
 from style_recognition.research.trainer import SupervisedTrainer
 from utils.data_utils import Batcher
-from utils.experiment_utils import Experiment
+from utils.experiment_utils import Experiment, ExperimentSummarizer
 from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools
@@ -86,3 +86,6 @@ transformations = [functools.partial(Preprocessor.char_based_pad, size=max_chars
                    functools.partial(Preprocessor.chat_based_truncate, size=max_charslen)]
 
 experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})
+
+experiment_summarizer = ExperimentSummarizer('./style_recognition/shared/experiments/')
+experiment_summarizer.run()

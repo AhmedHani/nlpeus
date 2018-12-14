@@ -18,6 +18,9 @@ import codecs
 import datetime
 import matplotlib
 matplotlib.use('Agg')
+import pandas as pd
+import pickle as pkl
+from glob import glob
 import matplotlib.pyplot as plt
 
 
@@ -204,7 +207,7 @@ class Experiment(object):
                 else:
                     y_valid = [class2index[item] for item in Y]
 
-                conf_matrix = trainer.eval_batch(x_valid, y_valid)
+                trainer.eval_batch(x_valid, y_valid)
 
                 print("Batch: {}/{}".format(cnter, batcher.total_batches('valid')))
                 cnter += 1
@@ -222,3 +225,141 @@ class Experiment(object):
         trainer.save(model_weights_name)
 
         print('\nexperiment location: {}\n'.format(self.experiment_dir))
+
+
+class ExperimentSummarizer(object):
+
+    def __init__(self, experiments_location):
+        self.experiments_location = experiments_location
+        self.project_name = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(self.experiments_location)))).upper()
+
+    def run(self):
+        summary_file = os.path.join(self.experiments_location, 'summary.txt')
+        sheet_file = os.path.join(self.experiments_location, 'experiments.xlsx')
+
+        experiments_data = []
+
+        with codecs.open(summary_file, 'w', encoding='utf-8') as writer:
+            for i, experiment_dir in enumerate(glob(self.experiments_location + '/*/')):
+                if os.path.basename(os.path.dirname(experiment_dir)) == '__pycache__':
+                    continue
+
+                experiment_name = os.path.basename(os.path.dirname(experiment_dir))
+                experiment_info_file = os.path.join(experiment_dir, 'info.txt')
+                experiment_eval_file = os.path.join(experiment_dir, 'eval.log')
+                experiment_results_file = os.path.join(experiment_dir, 'eval.pkl')
+                experiment_learning_curve_image = os.path.join(experiment_dir, 'learning_curve.png')
+
+                with codecs.open(experiment_info_file, 'r', encoding='utf-8') as reader:
+                    writer.write('########### Experiment #{} ###########\n\n'.format(i + 1))
+                    writer.write(reader.read())
+                    writer.write('\n\n')
+                
+                experiments_data.append([experiment_name, experiment_info_file, experiment_eval_file, 
+                                        experiment_results_file, experiment_learning_curve_image])
+        
+        research_sheet = [('Project Name', self.project_name),
+                          ('Export Date', datetime.datetime.now().strftime("%Y-%m-%d %H:%M")),
+                          ('Number of Experiments', len(experiments_data)),
+                          ('--', '--'),
+                          ('Experiment Setup', 'Average Precision', 'Average Recall', 'Average F-score', 'Total Accuracy')]
+        
+        writer = pd.ExcelWriter(sheet_file, engine='xlsxwriter')
+
+        for experiment_item in experiments_data:
+            name_tokens = experiment_item[0].replace('(', ' ').replace(')', ' ').strip().rstrip().split()
+            nclasses = name_tokens[1]
+            ninput = name_tokens[3]
+            model = name_tokens[5]
+            epochs = name_tokens[7]
+            batch_size = name_tokens[9]
+            device = name_tokens[11]
+
+            try:
+                suffix = name_tokens[12]
+            except IndexError:
+                suffix = None
+
+            research_experiment_setup = "Number of Classes: {}\nInput Length: {}\nModel Name: {}\nEpochs: {}\nBatch Size: {" \
+                                "}\nDevice: {}\nNotes: {}".format(nclasses, ninput, model, epochs, batch_size, device, suffix)
+
+            results_pickle_file = experiment_item[3]
+
+            with open(results_pickle_file, 'rb') as reader:
+                results = pkl.load(reader)
+
+            research_sheet.append((research_experiment_setup,
+                                    results['average_precision'],
+                                    results['average_recall'],
+                                    results['average_fscore'],
+                                    results['accuracy']))
+
+        df = pd.DataFrame(research_sheet)
+        df.to_excel(writer, 'All Experiments', index=0, index_label=0, header=False)
+
+        workbook = writer.book
+        worksheet = writer.sheets['All Experiments']
+
+        format_ = workbook.add_format()
+        format_.set_align('center')
+        format_.set_align('vcenter')
+        format_.set_text_wrap()
+        worksheet.set_column('A:Z', 30, format_)
+
+        for i, experiment_item in enumerate(experiments_data):
+            current_sheet = "Experiment {}".format(i + 1)
+
+            name_tokens = experiment_item[0].replace('(', ' ').replace(')', ' ').strip().rstrip().split()
+            nclasses = name_tokens[1]
+            ninput = name_tokens[3]
+            model = name_tokens[5]
+            epochs = name_tokens[7]
+            batch_size = name_tokens[9]
+            device = name_tokens[11]
+            suffix = name_tokens[13] if len(name_tokens) == 14 else None
+
+            experiment_info_file = experiment_item[1]
+            experiment_results_file = experiment_item[3]
+            experiment_learning_curve_image = experiment_item[4]
+
+            with codecs.open(experiment_info_file, 'r', encoding='utf-8') as reader:
+                experiment_info = list(map(lambda v: v.strip().rstrip(), reader.readlines()))
+
+                author = experiment_info[0]
+                project = experiment_info[1]
+                date_and_time = experiment_info[2]
+                total_training_samples = experiment_info[5].split()[-1]
+                total_valid_samples = experiment_info[6].split()[-1]
+                total_test_samples = experiment_info[7].split()[-1]
+
+                sheet = [('Project Name', project), ('Author', author), ('Date and Time', date_and_time),
+                        ('Number of Training Samples', total_training_samples),
+                        ('Number of Validation Samples', total_valid_samples), ('Number of Testing Samples', total_test_samples),
+                        ('--', '--'), ('Number of Classes', nclasses), ('Input Length', ninput), ('Model', model),
+                        ('Epochs', epochs), ('Batch Size', batch_size), ('Device', device), ('Notes', suffix), ('--', '--')]
+
+                with open(experiment_results_file, 'rb') as reader:
+                    results = pkl.load(reader)
+
+                sheet.append(('Average Precision', results['average_precision']))
+                sheet.append(('Average Recall', results['average_recall']))
+                sheet.append(('Average F-score', results['average_fscore']))
+                sheet.append(('--', '--'))
+
+                df = pd.DataFrame(sheet)
+                df.to_excel(writer, current_sheet, index=0, index_label=0, header=False)
+
+                workbook = writer.book
+                worksheet = writer.sheets[current_sheet]
+
+                worksheet.insert_image('C3', experiment_learning_curve_image)
+
+                format_ = workbook.add_format()
+                format_.set_align('center')
+                format_.set_align('vcenter')
+                format_.set_text_wrap()
+
+                worksheet.set_column('A:Z', 30, format_)
+
+        writer.save()        
+        
