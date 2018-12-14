@@ -4,6 +4,7 @@
 *.pt
 *.png
 experiments/
+!experiments/summary.txt
 __pycache__
 .DS_Store
 .floydexpt
