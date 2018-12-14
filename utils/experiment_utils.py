@@ -13,6 +13,7 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 
 import os
 import time
+import json
 import shutil
 import codecs
 import datetime
@@ -133,6 +134,17 @@ class Experiment(object):
             writer.write('\t device: {}\n'.format(self.device))
 
         return self.experiment_dir
+
+    def save_misc(self, fmt='json', **kwargs):
+        for varname, value in kwargs.items():
+            filepath = os.path.join(self.saved_data_dir, varname)
+            
+            if fmt is 'json':
+                with open(filepath + '.json', 'w') as writer:
+                    json.dump(value, writer)
+            else:
+                with open(filepath + 'pkl', 'w') as writer:
+                    pkl.dump(value, writer)
 
     def run(self, trainer, batcher, encoder, data_axis, transformations=None, class2index=None):
 
