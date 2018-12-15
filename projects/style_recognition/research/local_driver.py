@@ -21,6 +21,7 @@ from common.experiment import SupervisedExperiment, SupervisedExperimentSummariz
 from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools
+from common.transformations import TextTransformations
 
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
@@ -83,8 +84,11 @@ experiment.save_misc(fmt='json', style2index=class2index, index2style=index2clas
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
-transformations = [functools.partial(Preprocessor.char_based_pad, size=max_charslen),
-                   functools.partial(Preprocessor.chat_based_truncate, size=max_charslen)]
+
+transformations = TextTransformations(
+    TextTransformations.CharPad(size=max_charslen),
+    TextTransformations.CharTruncate(size=max_charslen)
+)
 
 experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})
 

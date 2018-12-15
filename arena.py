@@ -11,5 +11,5 @@ __license__ = "GPL"
 __maintainer__ = "Ahmed H. Al-Ghidani"
 __email__ = "ahmed.hani.ibrahim@gmail.com"
 
-import style_recognition.research.local_driver
+import projects.style_recognition.research.local_driver
 
