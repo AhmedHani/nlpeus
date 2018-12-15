@@ -1,4 +1,4 @@
-<a href="url"><img src="https://github.com/AhmedHani/nlpeus/blob/master/nlpeus-logo.png"></a>
+<a href="url"><img src="https://github.com/AhmedHani/nlpeus/blob/master/nlpeus-logo.png" align='right'></a>
 
 
 # nlpeus
