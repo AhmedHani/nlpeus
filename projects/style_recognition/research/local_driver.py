@@ -13,15 +13,13 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 
 import argparse
 
-from models.torch_charnn import CharRNN
-from projects.style_recognition.research.data_processing import DataProcessing
-from common.trainer import SupervisedTrainer
 from common.batcher import Batcher
-from common.experiment import SupervisedExperiment, SupervisedExperimentSummarizer
-from utils.text_utils import TextDatasetAnalyzer
-from utils.text_utils import TextEncoder, Preprocessor
-import functools
+from models.torch_charnn import CharRNN
+from common.trainer import SupervisedTrainer
 from common.transformations import TextTransformations
+from utils.text_utils import TextDatasetAnalyzer, TextEncoder, Preprocessor
+from projects.style_recognition.research.data_processing import DataProcessing
+from common.experiment import SupervisedExperiment, SupervisedExperimentSummarizer
 
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
