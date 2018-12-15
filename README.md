@@ -1,3 +1,6 @@
+![nlpeus Logo]
+
+--------------------------------------------------------------------------------
 # nlpeus
 [nlpeus](https://github.com/AhmedHani/nlpeus) is a training playground for several Natural Language Processing research projects. 
 

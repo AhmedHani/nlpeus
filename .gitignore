@@ -2,7 +2,6 @@
 *.pyc
 *.pkl
 *.pt
-*.png
 experiments/
 __pycache__
 .DS_Store
