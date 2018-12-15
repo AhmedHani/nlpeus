@@ -14,7 +14,7 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 import argparse
 
 from models.torch_charnn import CharRNN
-from style_recognition.research.data_processing import DataProcessing
+from projects.style_recognition.research.data_processing import DataProcessing
 from common.trainer import SupervisedTrainer
 from common.batcher import Batcher
 from common.experiment import SupervisedExperiment, SupervisedExperimentSummarizer
@@ -43,8 +43,8 @@ min_wordsfreq = args.min_wordsfreq
 min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
 
-dp = DataProcessing(news_file='./style_recognition/datasets/paper-news/news.txt',
-                    papers_file='./style_recognition/datasets/paper-news/paper.txt',
+dp = DataProcessing(news_file='./projects/style_recognition/datasets/paper-news/news.txt',
+                    papers_file='./projects/style_recognition/datasets/paper-news/paper.txt',
                     pre_processing=False)
 
 data = dp.news_data + dp.papers_data
@@ -88,5 +88,5 @@ transformations = [functools.partial(Preprocessor.char_based_pad, size=max_chars
 
 experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})
 
-experiment_summarizer = SupervisedExperimentSummarizer('./style_recognition/shared/experiments/')
+experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
 experiment_summarizer.run()
