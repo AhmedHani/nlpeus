@@ -318,7 +318,7 @@ class SupervisedExperimentSummarizer(object):
             md_experiment_setup = "Number of Classes: {}<br>Input Length: {}<br>Model Name: {}<br>Epochs: {}<br>Batch Size: {" \
                                 "}<br>Device: {}<br>Notes: {}".format(nclasses, ninput, model, epochs, batch_size, device, suffix)
 
-            md_format = "| {} | {:0.3f} | {:0.3f} | {:0.3f} | {} |".format(
+            md_format = "| {} | <center>{:0.3f}</center> | <center>{:0.3f}</center> | <center>{:0.3f}</center> | <center>{}</center> |".format(
                 md_experiment_setup,
                 results['average_precision'],
                 results['average_recall'],
