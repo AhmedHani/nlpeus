@@ -25,10 +25,10 @@ from common.experiment import SupervisedExperiment, SupervisedExperimentSummariz
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
 parser.add_argument('--batch_size', type=int, default=128, help='training batch size')
-parser.add_argument('--epochs', type=int, default=2, help='number of training epochs')
+parser.add_argument('--epochs', type=int, default=10, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
-parser.add_argument('--no-cuda', action='store_true', default=True, help='disables CUDA training')
+parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
 parser.add_argument('--min-charsfreq', type=int, default=100, help='min chars frequency to be considered')
 
