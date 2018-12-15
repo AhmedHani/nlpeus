@@ -12,4 +12,6 @@ __maintainer__ = "Ahmed H. Al-Ghidani"
 __email__ = "ahmed.hani.ibrahim@gmail.com"
 
 import projects.style_recognition.research.local_driver
-
+#from common.experiment import SupervisedExperimentSummarizer
+#experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
+#experiment_summarizer.run()

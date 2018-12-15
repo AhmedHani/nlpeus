@@ -249,6 +249,7 @@ class SupervisedExperimentSummarizer(object):
     def run(self):
         summary_file = os.path.join(self.output_location, 'summary.txt')
         sheet_file = os.path.join(self.output_location, 'experiments.xlsx')
+        experiments_md = os.path.join(self.output_location, 'experiments.md')
 
         experiments_data = []
 
@@ -283,6 +284,9 @@ class SupervisedExperimentSummarizer(object):
         
         writer = pd.ExcelWriter(sheet_file, engine='xlsxwriter')
 
+        md_writer = ['| Experiment Setup | Average Precision | Average Recall | Average F-score | Total Accuracy']
+        md_writer.append('| ------------- | ------------- | ------------- | ------------- | ------------- |')
+
         for experiment_item in experiments_data:
             name_tokens = experiment_item[0].replace('(', ' ').replace(')', ' ').strip().rstrip().split()
             nclasses = name_tokens[1]
@@ -310,9 +314,25 @@ class SupervisedExperimentSummarizer(object):
                                     results['average_recall'],
                                     results['average_fscore'],
                                     results['accuracy']))
+            
+            md_experiment_setup = "Number of Classes: {}<br>Input Length: {}<br>Model Name: {}<br>Epochs: {}<br>Batch Size: {" \
+                                "}<br>Device: {}<br>Notes: {}".format(nclasses, ninput, model, epochs, batch_size, device, suffix)
+
+            md_format = "| {} | {} | {} | {} | {} |".format(
+                md_experiment_setup,
+                results['average_precision'],
+                results['average_recall'],
+                results['average_fscore'],
+                results['accuracy']
+            )
+
+            md_writer.append(md_format)
 
         df = pd.DataFrame(research_sheet)
         df.to_excel(writer, 'All Experiments', index=0, index_label=0, header=False)
+
+        with codecs.open(experiments_md, 'w', encoding='utf-8') as writerrr:
+            writerrr.write("\n".join(md_writer))
 
         workbook = writer.book
         worksheet = writer.sheets['All Experiments']

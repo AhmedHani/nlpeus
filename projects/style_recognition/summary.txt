@@ -2,53 +2,6 @@
 
 author: A.H. Al-Ghidani
 project: style_recognition
-date and time: 2018-12-15 15:43
-
-experiment setup:
-	 total training samples: 172831
-	 total validation samples: 21603
-	 total testing samples: 21603
-	 model: CharRNN
-	 epochs: 2
-	 batch size: 128
-	 number of classes: 2
-	 input length: 50
-	 device: cpu
-
-
-+--------------+------------+
-| class index  | class name |
-+--------------+------------+
-| class news   | 0          |
-| class papers | 1          |
-+--------------+------------+
-
-confusion matrix
-+---------+---------+---------+
-| --      | class 0 | class 1 |
-+---------+---------+---------+
-| class 0 | 138     | 62      |
-| class 1 | 190     | 250     |
-+---------+---------+---------+
-
-accuracy: 0.606
-
-+-----------+---------------------+--------------------+
-| --        | class 0             | class 1            |
-+-----------+---------------------+--------------------+
-| precision | 0.69                | 0.5681818181818182 |
-| recall    | 0.42073170731707316 | 0.8012820512820513 |
-| fscore    | 0.5227272727272727  | 0.6648936170212767 |
-+-----------+---------------------+--------------------+
-
-average fscore: 0.5938104448742747
-
-
-
-########### Experiment #2 ###########
-
-author: A.H. Al-Ghidani
-project: style_recognition
 date and time: 2018-12-13 15:37
 
 experiment setup:
@@ -92,7 +45,7 @@ average fscore: 0.7061073616118854
 
 
 
-########### Experiment #3 ###########
+########### Experiment #2 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
