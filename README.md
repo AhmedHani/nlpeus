@@ -1,5 +1,6 @@
-<a href="url"><img src="https://github.com/AhmedHani/nlpeus/blob/master/nlpeus-logo.png" align="center" height="100" width="300" ></a>
-------------------------------------------
+<a href="url"><img src="https://github.com/AhmedHani/nlpeus/blob/master/nlpeus-logo.png" align="center" height="150" width="300" ></a>
+
+
 # nlpeus
 [nlpeus](https://github.com/AhmedHani/nlpeus) is a training playground for several Natural Language Processing research projects. 
 
