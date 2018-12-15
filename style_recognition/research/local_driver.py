@@ -15,9 +15,9 @@ import argparse
 
 from models.torch_charnn import CharRNN
 from style_recognition.research.data_processing import DataProcessing
-from style_recognition.research.trainer import SupervisedTrainer
-from utils.data_utils import Batcher
-from utils.experiment_utils import SupervisedExperiment, SupervisedExperimentSummarizer
+from common.trainer import SupervisedTrainer
+from common.batcher import Batcher
+from common.experiment import SupervisedExperiment, SupervisedExperimentSummarizer
 from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools

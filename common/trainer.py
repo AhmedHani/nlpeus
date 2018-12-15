@@ -11,7 +11,7 @@ __license__ = "GPL"
 __maintainer__ = "Ahmed H. Al-Ghidani"
 __email__ = "ahmed.hani.ibrahim@gmail.com"
 
-from utils.eval_utils import Evaluator
+from common.evaluator import SupervisedEvaluator
 
 
 class SupervisedTrainer(object):
@@ -38,7 +38,7 @@ class SupervisedTrainer(object):
     def eval_batch(self, x_valid, y_valid):
         predictions = self.model.predict_classes(x_valid)
 
-        conf_matrix = Evaluator.get_confusion_matrix(predictions, y_valid, self.index2class)
+        conf_matrix = SupervisedEvaluator.get_confusion_matrix(predictions, y_valid, self.index2class)
 
         if self.complete_conf_matrix is None:
             self.complete_conf_matrix = conf_matrix
@@ -51,7 +51,7 @@ class SupervisedTrainer(object):
         return self.eval_batch(x_valid, y_valid)
 
     def show_evaluation(self, precision_recall_fscore=True, conf_matrix=True, accuracy=True, stdout='stdout', pickle_path=None):
-        Evaluator.supervised_evaluate_batches(self.complete_conf_matrix,
+        SupervisedEvaluator.evaluate_batches(self.complete_conf_matrix,
                                                 precision_recall_fscore,
                                                 conf_matrix,
                                                 accuracy,

@@ -16,10 +16,10 @@ import pickle as pkl
 from terminaltables import AsciiTable
 
 
-class Evaluator:
+class SupervisedEvaluator:
 
     @staticmethod
-    def supervised_evaluate_batches(complete_matrix,
+    def evaluate_batches(complete_matrix,
                          precision_recall_fscore,
                          conf_matrix,
                          accuracy,
