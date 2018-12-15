@@ -25,7 +25,7 @@ from glob import glob
 import matplotlib.pyplot as plt
 
 
-class Experiment(object):
+class SupervisedExperiment(object):
 
     def __init__(self, total_samples,
                  total_training_samples,
@@ -239,7 +239,7 @@ class Experiment(object):
         print('\nexperiment location: {}\n'.format(self.experiment_dir))
 
 
-class ExperimentSummarizer(object):
+class SupervisedExperimentSummarizer(object):
 
     def __init__(self, experiments_location):
         self.experiments_location = experiments_location

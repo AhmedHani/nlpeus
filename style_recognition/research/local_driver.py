@@ -17,7 +17,7 @@ from models.torch_charnn import CharRNN
 from style_recognition.research.data_processing import DataProcessing
 from style_recognition.research.trainer import SupervisedTrainer
 from utils.data_utils import Batcher
-from utils.experiment_utils import Experiment, ExperimentSummarizer
+from utils.experiment_utils import SupervisedExperiment, SupervisedExperimentSummarizer
 from utils.text_utils import TextDatasetAnalyzer
 from utils.text_utils import TextEncoder, Preprocessor
 import functools
@@ -64,7 +64,7 @@ dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 model = CharRNN(input_size=len(char2index), output_size=len(class2index) - 1, device=device)
 
-experiment = Experiment(
+experiment = SupervisedExperiment(
     total_samples=len(data),
     total_training_samples=batcher.total_train_samples,
     total_valid_samples=batcher.total_valid_samples,
@@ -88,5 +88,5 @@ transformations = [functools.partial(Preprocessor.char_based_pad, size=max_chars
 
 experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})
 
-experiment_summarizer = ExperimentSummarizer('./style_recognition/shared/experiments/')
+experiment_summarizer = SupervisedExperimentSummarizer('./style_recognition/shared/experiments/')
 experiment_summarizer.run()
