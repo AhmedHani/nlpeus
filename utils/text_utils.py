@@ -589,21 +589,21 @@ class _WordEmbeddingLoader(object):
         if model_name == 'word2vec':
             try:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_word2vec_model(
-                    './data_utils/GoogleNews-vectors-negative300.bin')
+                    './support/GoogleNews-vectors-negative300.bin')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_word2vec_model(
                     '../input/word2vecgooglenewsvectors/GoogleNews-vectors-negative300.bin')
         elif model_name == 'fasttext':
             try:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
-                    './data_utils/crawl-300d-2M.vec')
+                    './support/crawl-300d-2M.vec')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
                     '../input/fasttextcrawl300d2m/crawl-300d-2M.vec')
         elif model_name == 'glove':
             try:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
-                    './data_utils/glove.6B.300d.txt')
+                    './support/glove.6B.300d.txt')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
                     '../input/glove6b/glove.6B.300d.txt')
