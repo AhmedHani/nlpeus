@@ -51,13 +51,13 @@ class SupervisedTrainer(object):
         return self.eval_batch(x_valid, y_valid)
 
     def show_evaluation(self, precision_recall_fscore=True, conf_matrix=True, accuracy=True, stdout='stdout', pickle_path=None):
-        Evaluator.evaluate_batches(self.complete_conf_matrix,
-                                   precision_recall_fscore,
-                                   conf_matrix,
-                                   accuracy,
-                                   self.index2class,
-                                   stdout,
-                                   pickle_path)
+        Evaluator.supervised_evaluate_batches(self.complete_conf_matrix,
+                                                precision_recall_fscore,
+                                                conf_matrix,
+                                                accuracy,
+                                                self.index2class,
+                                                stdout,
+                                                pickle_path)
 
     def test(self, x_test):
         predictions = self.model.predict_classes(x_test)

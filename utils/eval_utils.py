@@ -19,7 +19,7 @@ from terminaltables import AsciiTable
 class Evaluator:
 
     @staticmethod
-    def evaluate_batches(complete_matrix,
+    def supervised_evaluate_batches(complete_matrix,
                          precision_recall_fscore,
                          conf_matrix,
                          accuracy,
