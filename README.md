@@ -30,4 +30,4 @@ See you at the training arena!
 
 ## Projects
 
-- [Style Recognition](https://github.com/AhmedHani/nlpeus/tree/master/projects/style_recognition): Distinguishing between styles that are used to write text (eg. Papers/News Headlines)
+- [Style Recognition](https://github.com/AhmedHani/nlpeus/tree/master/projects/style_recognition): Distinguishing between the writing styles that are used to write text (eg. Papers/News Headlines)
