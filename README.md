@@ -1,4 +1,4 @@
-![nlpeus Logo]
+![nlpeus Logo](https://github.com/AhmedHani/nlpeus/blob/master/nlpeus.png?raw=true)
 
 --------------------------------------------------------------------------------
 # nlpeus
