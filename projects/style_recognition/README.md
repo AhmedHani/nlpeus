@@ -7,6 +7,7 @@ Distinguishing between the writing styles that are used to write text (eg. Paper
 
 | Experiment Setup | Average Precision | Average Recall | Average F-score | Total Accuracy
 | ------------- | ------------- | ------------- | ------------- | ------------- |
+| Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 10<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.984 | 0.984 | 0.984 | 0.984 |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 2<br>Batch Size: 128<br>Device: cpu<br>Notes: None | 0.767 | 0.719 | 0.706 | 0.72 |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 5<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.984 | 0.984 | 0.984 | 0.984 |
 
@@ -15,6 +16,53 @@ Distinguishing between the writing styles that are used to write text (eg. Paper
 
 ```
 ########### Experiment #1 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
+date and time: 2018-12-15 21:24
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 10
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cuda
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 10730   | 233     |
+| class 1 | 117     | 10552   |
++---------+---------+---------+
+
+accuracy: 0.984
+
++-----------+--------------------+--------------------+
+| --        | class 0            | class 1            |
++-----------+--------------------+--------------------+
+| precision | 0.978746693423333  | 0.9890336488893055 |
+| recall    | 0.9892136074490643 | 0.9783959202596199 |
+| fscore    | 0.9839523154516276 | 0.9836860259159131 |
++-----------+--------------------+--------------------+
+
+average fscore: 0.9838191706837704
+
+
+
+########### Experiment #2 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
@@ -61,7 +109,7 @@ average fscore: 0.7061073616118854
 
 
 
-########### Experiment #2 ###########
+########### Experiment #3 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
