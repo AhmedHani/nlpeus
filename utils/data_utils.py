@@ -157,24 +157,3 @@ class Batcher(object):
         return self.data[self.test_start_idx:self.test_end_idx]
 
 
-class Statistics:
-
-    @classmethod
-    def mean_std(cls, data, axis=None):
-        data = np.asarray(data)
-
-        return np.mean(data, axis=axis), np.std(data, axis=axis)
-
-    @classmethod
-    def mean(cls, data, axis=None):
-        data = np.asarray(data)
-
-        return np.mean(data, axis=axis)
-
-    @classmethod
-    def std(cls, data, axis=None):
-        data = np.asarray(data)
-
-        return np.std(data, axis=axis)
-
-
