@@ -77,3 +77,9 @@ class SupervisedTrainer(object):
 
     def load(self, path):
         return self.model.load_weights(path)
+    
+    def model_args(self):
+        return self.model.args()
+    
+    def model_class(self):
+        return self.model.__class__

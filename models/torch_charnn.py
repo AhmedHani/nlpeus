@@ -28,6 +28,15 @@ class CharRNN(nn.Module):
         self.hidden_size = hidden_size
         self.output_size = output_size
         self.n_layers = n_layers
+
+        self.kwargs = {
+            'input_size': self.input_size,
+            'output_size': self.output_size,
+            'hidden_size': self.hidden_size,
+            'model': self.model,
+            'n_layers': self.n_layers,
+            'device': device
+        }
         
         self.encoder = nn.Embedding(input_size, hidden_size)
         self.rnn = nn.LSTM(hidden_size, hidden_size, n_layers, batch_first=True)
@@ -104,3 +113,6 @@ class CharRNN(nn.Module):
         self.load_state_dict(torch.load(path, map_location=self.device))
 
         return True
+    
+    def args(self):
+        return self.kwargs

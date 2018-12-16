@@ -222,12 +222,23 @@ class SupervisedExperiment(object):
                                 stdout=self.eval_file_path,
                                 pickle_path=self.pickle_file_path)
 
-        model_weights_name = os.path.join(self.saved_model_dir, 'model_weights.pt')
+        model_weights_name = os.path.join(self.saved_model_dir, 'weights.pt')
         trainer.save(model_weights_name)
 
+        model_class_name = os.path.join(self.saved_model_dir, 'model.pkl')
+        model_class = trainer.model_class()
+
+        with open(model_class_name, 'wb') as modelwriter:
+            pkl.dump(model_class, modelwriter)
+        
+        model_args_name = os.path.join(self.saved_model_dir, 'args.json')
+        model_args = trainer.model_args()
+
+        with open(model_args_name, 'w') as modelwriter:
+            json.dump(model_args, modelwriter)
+
         if with_pipeline_save:
-            self.save_pipeline(trainer=trainer, 
-                                encoder=encoder, 
+            self.save_pipeline(encoder=encoder, 
                                 transformations=transformations, 
                                 class2index=class2index, 
                                 index2class=index2class)

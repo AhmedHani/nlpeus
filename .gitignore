@@ -3,6 +3,7 @@
 *.pkl
 *.pt
 experiments/
+production/
 __pycache__
 .DS_Store
 .floydexpt

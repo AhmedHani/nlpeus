@@ -15,12 +15,5 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 #from common.experiment import SupervisedExperimentSummarizer
 #experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
 #experiment_summarizer.run()
-import pickle as pkl
-import json
 
-encoder = pkl.load(open('./projects/style_recognition/shared/experiments/nclasses(2)ninput(50)model(CharRNN)epochs(10)batchsize(128)device(cpu)/saved_pipeline/encoder.pkl', 'rb'))
-trainer = pkl.load(open('./projects/style_recognition/shared/experiments/nclasses(2)ninput(50)model(CharRNN)epochs(10)batchsize(128)device(cpu)/saved_pipeline/trainer.pkl', 'rb'))
-transformations = pkl.load(open('./projects/style_recognition/shared/experiments/nclasses(2)ninput(50)model(CharRNN)epochs(10)batchsize(128)device(cpu)/saved_pipeline/transformations.pkl', 'rb'))
-
-
-x = 0
+import projects.style_recognition.release.recognizer
