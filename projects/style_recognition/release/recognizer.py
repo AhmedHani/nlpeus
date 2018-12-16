@@ -15,6 +15,7 @@ import os
 import json
 import argparse
 import pickle as pkl
+import codecs
 from glob import glob
 from models.torch_charnn import CharRNN
 from common.trainer import SupervisedTrainer
@@ -124,3 +125,4 @@ class StyleRecognizer(object):
         return class2index, index2class
 
 sr = StyleRecognizer()
+

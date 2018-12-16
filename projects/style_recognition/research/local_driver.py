@@ -25,7 +25,7 @@ from common.experiment import SupervisedExperiment, SupervisedExperimentSummariz
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
 parser.add_argument('--batch_size', type=int, default=128, help='training batch size')
-parser.add_argument('--epochs', type=int, default=8, help='number of training epochs')
+parser.add_argument('--epochs', type=int, default=3, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
@@ -90,5 +90,5 @@ transformations = TextTransformations(
 
 experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1}, with_pipeline_save=True)
 
-experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
-experiment_summarizer.run()
+#experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
+#experiment_summarizer.run()

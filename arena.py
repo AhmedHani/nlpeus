@@ -16,4 +16,4 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 #experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
 #experiment_summarizer.run()
 
-import projects.style_recognition.release.recognizer
+#import projects.style_recognition.release.recognizer
