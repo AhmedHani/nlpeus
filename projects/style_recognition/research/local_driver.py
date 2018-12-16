@@ -88,7 +88,7 @@ transformations = TextTransformations(
     TextTransformations.CharTruncate(size=max_charslen)
 )
 
-experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1})
+experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1}, with_pipeline_save=True)
 
 experiment_summarizer = SupervisedExperimentSummarizer('./projects/style_recognition/shared/experiments/')
 experiment_summarizer.run()

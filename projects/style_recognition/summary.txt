@@ -2,6 +2,53 @@
 
 author: A.H. Al-Ghidani
 project: style_recognition
+date and time: 2018-12-16 19:41
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 10
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cpu
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 108     | 51      |
+| class 1 | 153     | 200     |
++---------+---------+---------+
+
+accuracy: 0.602
+
++-----------+---------------------+-------------------+
+| --        | class 0             | class 1           |
++-----------+---------------------+-------------------+
+| precision | 0.6792452830188679  | 0.56657223796034  |
+| recall    | 0.41379310344827586 | 0.796812749003984 |
+| fscore    | 0.5142857142857142  | 0.662251655629139 |
++-----------+---------------------+-------------------+
+
+average fscore: 0.5882686849574266
+
+
+
+########### Experiment #2 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
 date and time: 2018-12-15 21:24
 
 experiment setup:
@@ -45,7 +92,7 @@ average fscore: 0.9838191706837704
 
 
 
-########### Experiment #2 ###########
+########### Experiment #3 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
@@ -92,7 +139,7 @@ average fscore: 0.7061073616118854
 
 
 
-########### Experiment #3 ###########
+########### Experiment #4 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition

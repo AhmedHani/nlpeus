@@ -135,18 +135,7 @@ class SupervisedExperiment(object):
 
         return self.experiment_dir
 
-    def save_misc(self, fmt='json', **kwargs):
-        for varname, value in kwargs.items():
-            filepath = os.path.join(self.saved_data_dir, varname)
-            
-            if fmt is 'json':
-                with open(filepath + '.json', 'w') as writer:
-                    json.dump(value, writer)
-            else:
-                with open(filepath + 'pkl', 'w') as writer:
-                    pkl.dump(value, writer)
-
-    def run(self, trainer, batcher, encoder, data_axis, transformations=None, class2index=None):
+    def run(self, trainer, batcher, encoder, data_axis, transformations=None, class2index=None, index2class=None, with_pipeline_save=False):
 
         try:
             epochs_average_losses = []
@@ -233,10 +222,47 @@ class SupervisedExperiment(object):
                                 stdout=self.eval_file_path,
                                 pickle_path=self.pickle_file_path)
 
-        model_weights_name = os.path.join(self.saved_model_dir, 'torch_model.pt')
+        model_weights_name = os.path.join(self.saved_model_dir, 'model_weights.pt')
         trainer.save(model_weights_name)
 
+        if with_pipeline_save:
+            self.save_pipeline(trainer=trainer, 
+                                encoder=encoder, 
+                                transformations=transformations, 
+                                class2index=class2index, 
+                                index2class=index2class)
+
         print('\nexperiment location: {}\n'.format(self.experiment_dir))
+
+    def save_misc(self, fmt='json', **kwargs):
+        for varname, value in kwargs.items():
+            filepath = os.path.join(self.saved_data_dir, varname)
+            
+            if fmt is 'json':
+                with open(filepath + '.json', 'w') as writer:
+                    json.dump(value, writer)
+            else:
+                with open(filepath + 'pkl', 'w') as writer:
+                    pkl.dump(value, writer)
+    
+    def save_pipeline(self, **kwargs):
+        self.saved_pipeline_dir = os.path.join(self.experiment_dir, 'saved_pipeline')
+        os.mkdir(self.saved_pipeline_dir)
+
+        for varname, value in kwargs.items():
+            if value is None:
+                continue
+
+            if isinstance(value, dict):
+                filepath = os.path.join(self.saved_pipeline_dir, varname)
+            
+                with open(filepath + '.json', 'w') as writer:
+                    json.dump(value, writer)
+            else:
+                filepath = os.path.join(self.saved_pipeline_dir, varname)
+
+                with open(filepath + '.pkl', 'wb') as writer:
+                    pkl.dump(value, writer)
 
 
 class SupervisedExperimentSummarizer(object):
