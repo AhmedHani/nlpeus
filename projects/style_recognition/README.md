@@ -22,6 +22,53 @@ Distinguishing between the writing styles that are used to write text (eg. Paper
 
 author: A.H. Al-Ghidani
 project: style_recognition
+date and time: 2018-12-16 19:41
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 10
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cpu
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 108     | 51      |
+| class 1 | 153     | 200     |
++---------+---------+---------+
+
+accuracy: 0.602
+
++-----------+---------------------+-------------------+
+| --        | class 0             | class 1           |
++-----------+---------------------+-------------------+
+| precision | 0.6792452830188679  | 0.56657223796034  |
+| recall    | 0.41379310344827586 | 0.796812749003984 |
+| fscore    | 0.5142857142857142  | 0.662251655629139 |
++-----------+---------------------+-------------------+
+
+average fscore: 0.5882686849574266
+
+
+
+########### Experiment #2 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
 date and time: 2018-12-15 21:24
 
 experiment setup:
@@ -65,7 +112,54 @@ average fscore: 0.9838191706837704
 
 
 
-########### Experiment #2 ###########
+########### Experiment #3 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
+date and time: 2018-12-16 23:13
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 8
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cpu
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 277     | 193     |
+| class 1 | 117     | 181     |
++---------+---------+---------+
+
+accuracy: 0.596
+
++-----------+--------------------+--------------------+
+| --        | class 0            | class 1            |
++-----------+--------------------+--------------------+
+| precision | 0.5893617021276596 | 0.6073825503355704 |
+| recall    | 0.7030456852791879 | 0.4839572192513369 |
+| fscore    | 0.6412037037037038 | 0.5386904761904762 |
++-----------+--------------------+--------------------+
+
+average fscore: 0.58994708994709
+
+
+
+########### Experiment #4 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
@@ -112,7 +206,101 @@ average fscore: 0.7061073616118854
 
 
 
-########### Experiment #3 ###########
+########### Experiment #5 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
+date and time: 2018-12-16 18:53
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 10
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cuda
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 10665   | 203     |
+| class 1 | 105     | 10659   |
++---------+---------+---------+
+
+accuracy: 0.986
+
++-----------+--------------------+--------------------+
+| --        | class 0            | class 1            |
++-----------+--------------------+--------------------+
+| precision | 0.9813213102686786 | 0.9902452619843924 |
+| recall    | 0.9902506963788301 | 0.9813109924507457 |
+| fscore    | 0.9857657824198169 | 0.9857578840284842 |
++-----------+--------------------+--------------------+
+
+average fscore: 0.9857618332241506
+
+
+
+########### Experiment #6 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
+date and time: 2018-12-16 23:25
+
+experiment setup:
+	 total training samples: 172831
+	 total validation samples: 21603
+	 total testing samples: 21603
+	 model: CharRNN
+	 epochs: 3
+	 batch size: 128
+	 number of classes: 2
+	 input length: 50
+	 device: cuda
+
+
++--------------+------------+
+| class index  | class name |
++--------------+------------+
+| class news   | 0          |
+| class papers | 1          |
++--------------+------------+
+
+confusion matrix
++---------+---------+---------+
+| --      | class 0 | class 1 |
++---------+---------+---------+
+| class 0 | 10708   | 171     |
+| class 1 | 226     | 10527   |
++---------+---------+---------+
+
+accuracy: 0.982
+
++-----------+--------------------+--------------------+
+| --        | class 0            | class 1            |
++-----------+--------------------+--------------------+
+| precision | 0.984281643533413  | 0.9789826095043244 |
+| recall    | 0.9793305286263033 | 0.9840157038698822 |
+| fscore    | 0.9817998441296475 | 0.9814927043028298 |
++-----------+--------------------+--------------------+
+
+average fscore: 0.9816462742162386
+
+
+
+########### Experiment #7 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
