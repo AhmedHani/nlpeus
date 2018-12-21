@@ -161,7 +161,7 @@ class SupervisedExperiment(object):
                     if class2index is None:
                         y_train = Y
                     else:
-                        y_train = [[class2index[item]] for item in Y]
+                        y_train = [class2index[item] for item in Y]
 
                     batch_loss = trainer.fit_batch(x_train, y_train)
 

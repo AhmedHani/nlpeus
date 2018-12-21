@@ -15,7 +15,7 @@ import argparse
 
 from common.batcher import Batcher
 
-from models.torch_charnn import CharRNN
+from models.torch_charnn import MultiCharRNN
 from common.trainer import SupervisedTrainer
 from common.transformations import TextTransformations
 from utils.text_utils import TextDatasetAnalyzer, TextEncoder, Preprocessor
@@ -25,11 +25,11 @@ from projects.style_recognition.research.data_processing import SpookyAuthorsDat
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
 
-parser.add_argument('--batch_size', type=int, default=128, help='training batch size')
+parser.add_argument('--batch_size', type=int, default=32, help='training batch size')
 parser.add_argument('--epochs', type=int, default=3, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
-parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
+parser.add_argument('--no-cuda', action='store_true', default=True, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
 parser.add_argument('--min-charsfreq', type=int, default=100, help='min chars frequency to be considered')
 
@@ -50,13 +50,14 @@ dp = SpookyAuthorsDataProcessing(train_file='./projects/style_recognition/datase
 class2index, index2class = dp.class2index, dp.index2class
 
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
-                                       outpath='./projects/style_recognition/datasets/spooky_authors/train_analysis.log')
+                                       outpath=None)
 
 #dataset_analyzer.all()
+
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 
 batcher = Batcher(data=dp.train_data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
-model = CharRNN(input_size=len(char2index), output_size=len(class2index), device=device)
+model = MultiCharRNN(input_size=len(char2index), output_size=len(class2index), device=device)
 
 experiment = SupervisedExperiment(
     total_samples=len(dp.train_data) + len(dp.test_data),
@@ -69,11 +70,12 @@ experiment = SupervisedExperiment(
     number_classes=len(class2index),
     input_length=max_charslen,
     device=device,
-    author_name='A.H. Al-Ghidani'
+    author_name='A.H. Al-Ghidani',
+    dataset_name='spooky_authors'
 )
 
 experiment.create(__file__)
-experiment.save_misc(fmt='json', style2index=class2index, index2style=index2class)
+experiment.save_misc(fmt='json', author2index=class2index, index2author=index2class)
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
@@ -83,4 +85,4 @@ transformations = TextTransformations(
     TextTransformations.CharTruncate(size=max_charslen)
 )
 
-experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1}, with_pipeline_save=True)
+experiment.run(trainer, batcher, encoder=text_encoder, class2index=class2index, transformations=transformations, data_axis={'X': 1, 'Y': 2}, with_pipeline_save=True)
