@@ -16,7 +16,7 @@ import utils.text_utils as text_utils
 from utils.text_utils import Preprocessor, TextDatasetAnalyzer
 
 
-class DataProcessing(object):
+class PapersNewsDataProcessing(object):
 
     def __init__(self, news_file, papers_file, pre_processing=False):
         self.news_data = self.__read_news_file(news_file, pre_processing)

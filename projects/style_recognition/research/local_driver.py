@@ -18,8 +18,8 @@ from models.torch_charnn import CharRNN
 from common.trainer import SupervisedTrainer
 from common.transformations import TextTransformations
 from utils.text_utils import TextDatasetAnalyzer, TextEncoder, Preprocessor
-from projects.style_recognition.research.data_processing import DataProcessing
 from common.experiment import SupervisedExperiment, SupervisedExperimentSummarizer
+from projects.style_recognition.research.data_processing import PapersNewsDataProcessing
 
 
 parser = argparse.ArgumentParser(description='Style Recognition training playground')
@@ -42,9 +42,9 @@ min_wordsfreq = args.min_wordsfreq
 min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
 
-dp = DataProcessing(news_file='./projects/style_recognition/datasets/paper-news/news.txt',
-                    papers_file='./projects/style_recognition/datasets/paper-news/paper.txt',
-                    pre_processing=False)
+dp = PapersNewsDataProcessing(news_file='./projects/style_recognition/datasets/paper-news/news.txt', 
+                              papers_file='./projects/style_recognition/datasets/paper-news/paper.txt', 
+                              pre_processing=False)
 
 data = dp.news_data + dp.papers_data
 class2index, index2class = dp.class2index, dp.index2class
