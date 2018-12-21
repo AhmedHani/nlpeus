@@ -1,9 +1,26 @@
 # Problem Definition
-Distinguishing between the writing styles that are used to write text (eg. Papers/News Headlines)
+Distinguishing between the writing styles that are used to write text.
+
+
+## Papers/News Headlines
+
+- A binary classification problem. We have some dataset, collected from [Style Transfer in Text: Exploration and Evaluation](https://arxiv.org/pdf/1711.06861.pdf), for papers and news headlines. The target is to classify a given headline into either a paper or news
+- We mainly used a [Character-level LSTM architecture](https://github.com/AhmedHani/nlpeus/blob/master/models/torch_charnn.py) to do our experiments (detailed experiments and hyperparameters below)
+
+### Dataset analysis
+```
+number of instances: 216041
+average number of words: 9
+average number of chars: 68
+number of unique words: 155030
+number of unique chars: 174
+classes frequencies: 
+		news: 108503
+		papers: 107538
+```
 
 
 # Experiments
-
 
 | Experiment Setup | Average Precision | Average Recall | Average F-score | Total Accuracy
 | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -14,6 +31,7 @@ Distinguishing between the writing styles that are used to write text (eg. Paper
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 10<br>Batch Size: 128<br>Device: cuda<br>Notes: _new | 0.986 | 0.986 | 0.986 | 0.986 |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 3<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.982 | 0.982 | 0.982 | 0.982 |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 5<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.984 | 0.984 | 0.984 | 0.984 |
+
 
 # Experiments Details
 
