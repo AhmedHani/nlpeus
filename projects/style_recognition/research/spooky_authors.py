@@ -14,6 +14,7 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 import argparse
 
 from common.batcher import Batcher
+
 from models.torch_charnn import CharRNN
 from common.trainer import SupervisedTrainer
 from common.transformations import TextTransformations
@@ -49,8 +50,8 @@ dp = SpookyAuthorsDataProcessing(train_file='./projects/style_recognition/datase
 class2index, index2class = dp.class2index, dp.index2class
 
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
-                                       index2class=index2class,
-                                       outpath='./style_recognition/datasets/spooky_authors/train_analysis.log')
+                                       outpath='./projects/style_recognition/datasets/spooky_authors/train_analysis.log')
+
 
 dataset_analyzer.all()
 del dataset_analyzer

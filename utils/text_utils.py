@@ -296,7 +296,7 @@ class TextAnalyzer:
 
 class TextDatasetAnalyzer:
 
-    def __init__(self, data, data_axis, index2class, outpath='stdout'):
+    def __init__(self, data, data_axis, outpath='stdout'):
         if isinstance(data_axis['text'], int):
             self.data = [item[data_axis['text']] for item in data]
         else:
@@ -306,7 +306,6 @@ class TextDatasetAnalyzer:
                 self.data += [item[index] for item in data]
             
         self.labels = [item[data_axis['label']] for item in data]
-        self.index2class = index2class
 
         self.out = self.__set_output_location(outpath)
     
@@ -350,9 +349,9 @@ class TextDatasetAnalyzer:
             self.out.write('number of unique chars: {}\n'.format(len(chars)))
         
         if n_samples_per_class:
-            classes = Counter(self.labels).most_common(len(self.labels))
+            classes = Counter(self.labels).most_common(len(self.labels))           
 
-            freqs_format = '\n'.join(['\t\t' + self.index2class[key] + ': ' + str(value) for key, value in classes])
+            freqs_format = '\n'.join(['\t\t' + str(key) + ': ' + str(value) for key, value in classes])
             self.out.write('classes frequencies: \n{}\n\n'.format(freqs_format))
         
         if words_freqs:
@@ -507,14 +506,14 @@ class TextDatasetAnalyzer:
     def n_samples_per_class(self):
         classes = Counter(self.labels).most_common(len(self.labels))
 
-        freqs_format = '\n'.join(['\t\t' + self.index2class[key] + ': ' + str(value) for key, value in classes])
+        freqs_format = '\n'.join(['\t\t' + str(key) + ': ' + str(value) for key, value in classes])
         self.out.write('classes frequencies: \n{}\n\n'.format(freqs_format))
 
     @staticmethod
     def __set_output_location(outpath):
         if outpath == 'stdout':
             return sys.stdout
-        
+
         if not os.path.exists(os.path.dirname(outpath)):
             raise Exception('file {} not existed!'.format(outpath))
         

@@ -57,7 +57,7 @@ class2index, index2class = dp.class2index, dp.index2class
 
 batcher = Batcher(data=data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
 dataset_analyzer = TextDatasetAnalyzer(data=batcher.train_data, data_axis={'text': 0, 'label': 1},
-                                       index2class=index2class, outpath='stdout')
+                                       outpath='stdout')
 
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 model = CharRNN(input_size=len(char2index), output_size=len(class2index) - 1, device=device)

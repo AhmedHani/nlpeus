@@ -78,9 +78,15 @@ class SpookyAuthorsDataProcessing(object):
 
             for line in all_lines:
                 line_tokens = list(filter(None, regex.findall(line.strip().rstrip())))
-                id_ = line_tokens[0]
-                text = line_tokens[1]
-                author = line_tokens[2]
+
+                if len(line_tokens) == 3:
+                    id_ = line_tokens[0]
+                    text = line_tokens[1]
+                    author = line_tokens[2]
+                else:
+                    id_ = line_tokens[0]
+                    text = ''.join(line_tokens[1:-1])
+                    author = line_tokens[-1]
 
                 if preprocessing:
                     text = Preprocessor.normalize_text(text)
@@ -100,8 +106,13 @@ class SpookyAuthorsDataProcessing(object):
 
             for line in all_lines:
                 line_tokens = list(filter(None, regex.findall(line.strip().rstrip())))
-                id_ = line_tokens[0]
-                text = line_tokens[1]
+                
+                if len(line_tokens) == 2:
+                    id_ = line_tokens[0]
+                    text = line_tokens[1]
+                else:
+                    id_ = line_tokens[0]
+                    text = ''.join(line_tokens[1:])
 
                 if preprocessing:
                     text = Preprocessor.normalize_text(text)

@@ -17,3 +17,5 @@ __email__ = "ahmed.hani.ibrahim@gmail.com"
 #experiment_summarizer.run()
 
 #import projects.style_recognition.release.recognizer
+
+import projects.style_recognition.research.spooky_authors
