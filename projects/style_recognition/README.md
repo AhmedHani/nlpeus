@@ -25,7 +25,7 @@ classes frequencies:
 You can find the experiments summary from [here](https://github.com/AhmedHani/nlpeus/blob/master/projects/style_recognition/experiments.xlsx)
 
 For all experiments
-- Pad and truncate the sentence to have max chars of length 50
+- Pad and truncate the sentences to have max chars of length 50
 
 | Experiment Setup | Average Precision | Average Recall | Average F-score | Total Accuracy
 | ------------- | ------------- | ------------- | ------------- | ------------- |
