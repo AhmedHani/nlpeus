@@ -4,7 +4,7 @@ Distinguishing between the writing styles that are used to write text.
 
 ## Papers/News Headlines
 
-- A binary classification problem. We have some dataset, collected from [Style Transfer in Text: Exploration and Evaluation](https://arxiv.org/pdf/1711.06861.pdf), for papers and news headlines. The target is to classify a given headline into either a paper or news
+- A binary classification problem. We have some [dataset](https://github.com/AhmedHani/nlpeus/tree/master/projects/style_recognition/datasets/paper-news), collected from [Style Transfer in Text: Exploration and Evaluation](https://arxiv.org/pdf/1711.06861.pdf), for papers and news headlines. The target is to classify a given headline into either a paper or news
 - We mainly used a [Character-level LSTM architecture](https://github.com/AhmedHani/nlpeus/blob/master/models/torch_charnn.py) to do our experiments (detailed experiments and hyperparameters below)
 
 ### Dataset analysis
