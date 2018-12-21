@@ -88,7 +88,7 @@ class SpookyAuthorsDataProcessing(object):
                 
                 train_data.append((id_, text, author))
             
-            return train_data
+        return train_data
 
     @staticmethod
     def __read_test_file(test_file, preprocessing):
@@ -109,4 +109,4 @@ class SpookyAuthorsDataProcessing(object):
                 
                 test_data.append((id_, text))
             
-            return test_data
+        return test_data
