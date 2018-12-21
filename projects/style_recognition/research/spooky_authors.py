@@ -41,3 +41,16 @@ max_wordslen = args.max_wordslen
 min_wordsfreq = args.min_wordsfreq
 min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
+
+dp = SpookyAuthorsDataProcessing(train_file='./projects/style_recognition/datasets/spooky_authors/train.csv',
+                                 test_file='./projects/style_recognition/datasets/spooky_authors/test.csv',
+                                 preprocessing=False)
+
+class2index, index2class = dp.class2index, dp.index2class
+
+dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
+                                       index2class=index2class,
+                                       outpath='./style_recognition/datasets/spooky_authors/train_analysis.log')
+
+dataset_analyzer.all()
+del dataset_analyzer
