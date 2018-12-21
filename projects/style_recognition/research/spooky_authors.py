@@ -52,6 +52,35 @@ class2index, index2class = dp.class2index, dp.index2class
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
                                        outpath='./projects/style_recognition/datasets/spooky_authors/train_analysis.log')
 
+#dataset_analyzer.all()
+char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 
-dataset_analyzer.all()
-del dataset_analyzer
+batcher = Batcher(data=dp.train_data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
+model = CharRNN(input_size=len(char2index), output_size=len(class2index), device=device)
+
+experiment = SupervisedExperiment(
+    total_samples=len(dp.train_data) + len(dp.test_data),
+    total_training_samples=batcher.total_train_samples,
+    total_valid_samples=batcher.total_valid_samples,
+    total_test_samples=batcher.total_test_samples,
+    model_name=model.__class__.__name__,
+    epochs=epochs,
+    batch_size=batch_size,
+    number_classes=len(class2index),
+    input_length=max_charslen,
+    device=device,
+    author_name='A.H. Al-Ghidani'
+)
+
+experiment.create(__file__)
+experiment.save_misc(fmt='json', style2index=class2index, index2style=index2class)
+
+trainer = SupervisedTrainer(model, classes=[class2index, index2class])
+text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
+
+transformations = TextTransformations(
+    TextTransformations.CharPad(size=max_charslen),
+    TextTransformations.CharTruncate(size=max_charslen)
+)
+
+experiment.run(trainer, batcher, encoder=text_encoder, transformations=transformations, data_axis={'X': 0, 'Y': 1}, with_pipeline_save=True)
