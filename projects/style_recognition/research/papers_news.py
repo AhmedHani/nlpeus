@@ -43,8 +43,7 @@ min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
 
 dp = PapersNewsDataProcessing(news_file='./projects/style_recognition/datasets/paper-news/news.txt', 
-                              papers_file='./projects/style_recognition/datasets/paper-news/paper.txt', 
-                              pre_processing=False)
+                              papers_file='./projects/style_recognition/datasets/paper-news/paper.txt', pre_processing=False)
 
 data = dp.news_data + dp.papers_data
 class2index, index2class = dp.class2index, dp.index2class
