@@ -22,6 +22,11 @@ classes frequencies:
 
 # Experiments
 
+You can find the experiments summary from [here](https://github.com/AhmedHani/nlpeus/blob/master/projects/style_recognition/experiments.xlsx)
+
+For all experiments
+- Pad and truncate the sentence to have max chars of length 50
+
 | Experiment Setup | Average Precision | Average Recall | Average F-score | Total Accuracy
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 10<br>Batch Size: 128<br>Device: cpu<br>Notes: None | 0.623 | 0.605 | 0.588 | 0.602 |
