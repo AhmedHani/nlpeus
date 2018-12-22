@@ -2,8 +2,8 @@
 *.pyc
 *.pkl
 *.pt
-experiments/
-production/
+**/**/**/experiments/*/*/
+**/**/**/production/*/
 __pycache__
 .DS_Store
 .floydexpt
