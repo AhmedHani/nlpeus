@@ -39,6 +39,7 @@ For all experiments
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 3<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.982 | 0.982 | 0.982 | 0.982 |
 | Number of Classes: 2<br>Input Length: 50<br>Model Name: CharRNN<br>Epochs: 5<br>Batch Size: 128<br>Device: cuda<br>Notes: None | 0.984 | 0.984 | 0.984 | 0.984 |
 
+----------------------------
 
 ## [Spooky Author Identification](https://www.kaggle.com/c/spooky-author-identification/data)
 
