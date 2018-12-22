@@ -142,13 +142,13 @@ class SupervisedExperiment(object):
         return self.experiment_dir
 
     def run(self, trainer, 
-                  batcher, 
-                  encoder, 
-                  data_axis, 
-                  transformations=None, 
-                  class2index=None, 
-                  index2class=None, 
-                  with_pipeline_save=False):
+            batcher, 
+            encoder, 
+            data_axis, 
+            transformations=None, 
+            class2index=None, 
+            index2class=None, 
+            with_pipeline_save=False):
 
         try:
             epochs_average_losses = []
