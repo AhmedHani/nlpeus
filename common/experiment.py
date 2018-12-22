@@ -37,8 +37,7 @@ class SupervisedExperiment(object):
                  number_classes,
                  input_length,
                  device,
-                 author_name=None,
-                 dataset_name=None):
+                 author_name=None):
         self.total_samples = total_samples
         self.total_training_samples = total_training_samples
         self.total_valid_samples = total_valid_samples
@@ -50,7 +49,6 @@ class SupervisedExperiment(object):
         self.input_length = input_length
         self.device = device
         self.author_name = author_name
-        self.dataset_name = dataset_name
 
         self.saved_model_dir = None
         self.saved_data_dir = None
@@ -71,9 +69,14 @@ class SupervisedExperiment(object):
             os.mkdir(os.path.join(experiment_resources, 'experiments'))
 
         experiment_resources = os.path.join(experiment_resources, 'experiments')
+        experiment_name = os.path.splitext(os.path.basename(research_interface))[0]
 
-        experiment_name = 'dataset({})nclasses({})ninput({})model({})epochs({})batchsize({})device({})'.format(
-            self.dataset_name,
+        if not os.path.exists(os.path.join(experiment_resources, experiment_name)):
+            os.mkdir(os.path.join(experiment_resources, experiment_name))
+        
+        experiment_resources = os.path.join(experiment_resources, experiment_name)
+        
+        experiment_name = 'nclasses({})ninput({})model({})epochs({})batchsize({})device({})'.format(
             self.number_classes,
             self.input_length,
             self.model_name,
@@ -283,13 +286,13 @@ class SupervisedExperimentSummarizer(object):
 
     def __init__(self, experiments_location):
         self.experiments_location = experiments_location
-        self.output_location = os.path.dirname(os.path.dirname(os.path.dirname(self.experiments_location)))
+        self.output_location = os.path.dirname(self.experiments_location)
         self.project_name = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(self.experiments_location)))).upper()
 
     def run(self):
-        summary_file = os.path.join(self.output_location, 'summary.txt')
-        sheet_file = os.path.join(self.output_location, 'experiments.xlsx')
-        experiments_md = os.path.join(self.output_location, 'experiments.md')
+        summary_file = os.path.join(self.experiments_location, 'summary.txt')
+        sheet_file = os.path.join(self.experiments_location, 'experiments.xlsx')
+        experiments_md = os.path.join(self.experiments_location, 'experiments.md')
 
         experiments_data = []
 
@@ -329,21 +332,20 @@ class SupervisedExperimentSummarizer(object):
 
         for experiment_item in experiments_data:
             name_tokens = experiment_item[0].replace('(', ' ').replace(')', ' ').strip().rstrip().split()
-            dataset_name = name_tokens[1]
-            nclasses = name_tokens[3]
-            ninput = name_tokens[5]
-            model = name_tokens[7]
-            epochs = name_tokens[9]
-            batch_size = name_tokens[11]
-            device = name_tokens[13]
+            nclasses = name_tokens[1]
+            ninput = name_tokens[3]
+            model = name_tokens[5]
+            epochs = name_tokens[7]
+            batch_size = name_tokens[9]
+            device = name_tokens[11]
 
             try:
-                suffix = name_tokens[14]
+                suffix = name_tokens[12]
             except IndexError:
                 suffix = None
 
-            research_experiment_setup = "Dataset Name: {}\nNumber of Classes: {}\nInput Length: {}\nModel Name: {}\nEpochs: {}\nBatch Size: {" \
-                                "}\nDevice: {}\nNotes: {}".format(dataset_name, nclasses, ninput, model, epochs, batch_size, device, suffix)
+            research_experiment_setup = "Number of Classes: {}\nInput Length: {}\nModel Name: {}\nEpochs: {}\nBatch Size: {" \
+                                "}\nDevice: {}\nNotes: {}".format(nclasses, ninput, model, epochs, batch_size, device, suffix)
 
             results_pickle_file = experiment_item[3]
 
@@ -388,14 +390,13 @@ class SupervisedExperimentSummarizer(object):
             current_sheet = "Experiment {}".format(i + 1)
 
             name_tokens = experiment_item[0].replace('(', ' ').replace(')', ' ').strip().rstrip().split()
-            dataset_name = name_tokens[1]
-            nclasses = name_tokens[3]
-            ninput = name_tokens[5]
-            model = name_tokens[7]
-            epochs = name_tokens[9]
-            batch_size = name_tokens[11]
-            device = name_tokens[13]
-            suffix = name_tokens[14] if len(name_tokens) == 16 else None
+            nclasses = name_tokens[1]
+            ninput = name_tokens[3]
+            model = name_tokens[5]
+            epochs = name_tokens[7]
+            batch_size = name_tokens[9]
+            device = name_tokens[11]
+            suffix = name_tokens[12] if len(name_tokens) == 14 else None
 
             experiment_info_file = experiment_item[1]
             experiment_results_file = experiment_item[3]

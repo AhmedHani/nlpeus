@@ -29,7 +29,7 @@ parser.add_argument('--batch_size', type=int, default=32, help='training batch s
 parser.add_argument('--epochs', type=int, default=3, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
-parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
+parser.add_argument('--no-cuda', action='store_true', default=True, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
 parser.add_argument('--min-charsfreq', type=int, default=100, help='min chars frequency to be considered')
 
@@ -70,12 +70,12 @@ experiment = SupervisedExperiment(
     number_classes=len(class2index),
     input_length=max_charslen,
     device=device,
-    author_name='A.H. Al-Ghidani',
-    dataset_name='spooky_authors'
+    author_name='A.H. Al-Ghidani'
 )
 
 experiment.create(__file__)
 experiment.save_misc(fmt='json', author2index=class2index, index2author=index2class)
+exit()
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
