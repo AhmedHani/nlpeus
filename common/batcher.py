@@ -17,7 +17,10 @@ import numpy as np
 
 class Batcher(object):
 
-    def __init__(self, data, batch_size=64, with_shuffle=True, divide_train_valid_test=True):
+    def __init__(self, data, 
+                 batch_size=64, 
+                 with_shuffle=True, 
+                 divide_train_valid_test=True):
         self.data = data
         self.size = len(self.data)
         self.batch_size = batch_size
