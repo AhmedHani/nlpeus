@@ -53,9 +53,6 @@ else:
 dp = SpookyAuthorsDataProcessing(train_file=train_file, test_file=test_file, preprocessing=False)
 class2index, index2class = dp.class2index, dp.index2class
 
-print(dp.train_data)
-exit()
-
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
                                        outpath=None)
 
