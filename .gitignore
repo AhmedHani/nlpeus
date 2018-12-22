@@ -4,6 +4,7 @@
 *.pt
 **/**/**/experiments/*/*/
 **/**/**/production/*/
+**/**/datasets/*/
 __pycache__
 .DS_Store
 .floydexpt
