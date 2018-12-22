@@ -4,7 +4,9 @@
 *.pt
 **/**/**/experiments/*/*/
 **/**/**/production/*/
-**/**/datasets/*/
+**/**/datasets/*/*.txt
+**/**/datasets/*/*.csv
+**/**/datasets/*/*.zip
 __pycache__
 .DS_Store
 .floydexpt
