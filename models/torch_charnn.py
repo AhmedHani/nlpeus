@@ -166,7 +166,7 @@ class MultiCharRNN(nn.Module):
     def predict_classes(self, input):
         output = self.forward(input)[0]
 
-        return output.max(1)[1].data.numpy()
+        return output.cpu().max(1)[1].data.numpy()
 
     def predict_probs(self, input):
         input = torch.LongTensor(input).to(self.device)
@@ -179,7 +179,7 @@ class MultiCharRNN(nn.Module):
 
         output = F.softmax(output, dim=1)
 
-        return output.max(1)[0].data.numpy()
+        return output.cpu().max(1)[0].data.numpy()
 
     def init_hidden(self, batch_size):
         weight = next(self.parameters()).data
