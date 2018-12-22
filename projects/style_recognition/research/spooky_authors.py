@@ -88,4 +88,10 @@ transformations = TextTransformations(
     TextTransformations.CharTruncate(size=max_charslen)
 )
 
-experiment.run(trainer, batcher, encoder=text_encoder, class2index=class2index, transformations=transformations, data_axis={'X': 1, 'Y': 2}, with_pipeline_save=True)
+experiment.run(trainer, 
+               batcher, 
+               encoder=text_encoder, 
+               class2index=class2index, 
+               transformations=transformations, 
+               data_axis={'X': 1, 'Y': 2}, 
+               with_pipeline_save=True)
