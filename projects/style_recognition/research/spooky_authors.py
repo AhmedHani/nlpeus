@@ -29,7 +29,7 @@ parser.add_argument('--batch_size', type=int, default=32, help='training batch s
 parser.add_argument('--epochs', type=int, default=3, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
 parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
-parser.add_argument('--no-cuda', action='store_true', default=True, help='disables CUDA training')
+parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
 parser.add_argument('--min-charsfreq', type=int, default=100, help='min chars frequency to be considered')
 
@@ -43,11 +43,18 @@ min_wordsfreq = args.min_wordsfreq
 min_charsfreq = args.min_charsfreq
 device = 'cpu' if not args.no_cuda is False else 'cuda'
 
-dp = SpookyAuthorsDataProcessing(train_file='./projects/style_recognition/datasets/spooky_authors/train.csv',
-                                 test_file='./projects/style_recognition/datasets/spooky_authors/test.csv',
-                                 preprocessing=False)
+if device is 'cpu':
+    train_file = './projects/style_recognition/datasets/spooky_authors/train.csv'
+    test_file = './projects/style_recognition/datasets/spooky_authors/test.csv'
+else:
+    train_file = '/floyd/input/data/spooky_authors/train.csv'
+    test_file = '/floyd/input/data/spooky_authors/test.csv'
 
+dp = SpookyAuthorsDataProcessing(train_file=train_file, test_file=test_file, preprocessing=False)
 class2index, index2class = dp.class2index, dp.index2class
+
+print(dp.train_data)
+exit()
 
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
                                        outpath=None)
