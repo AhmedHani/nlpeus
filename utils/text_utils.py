@@ -309,6 +309,9 @@ class TextDatasetAnalyzer:
 
         if outpath is not None:
             self.out = self.__set_output_location(outpath)
+            
+            self.all()
+        
     
     def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
                   n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True):
