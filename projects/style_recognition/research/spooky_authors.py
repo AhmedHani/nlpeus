@@ -57,8 +57,6 @@ class2index, index2class = dp.class2index, dp.index2class
 dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1, 'label': 2},
                                        outpath=None)
 
-#dataset_analyzer.all()
-
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 word2index, index2word = dataset_analyzer.get_words_ids(min_freqs=min_wordsfreq)
 
@@ -88,7 +86,10 @@ trainer = SupervisedTrainer(model, classes=[class2index, index2class])
 
 transformations = TextTransformations(
     TextTransformations.WordPad(size=max_wordslen),
-    TextTransformations.WordTruncate(size=max_wordslen)
+    TextTransformations.WordTruncate(size=max_wordslen),
+    TextTransformations.Normalize(),
+    TextTransformations.SeparatePunctuations(),
+    TextTransformations.ReplaceApostrophes()
 )
 
 experiment.run(trainer, 

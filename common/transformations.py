@@ -54,3 +54,27 @@ class TextTransformations(object):
 
         def __new__(cls, size):
             return functools.partial(Preprocessor.word_based_truncate, size=size)
+    
+    class Normalize(object):
+
+        def __init__(self):
+            pass
+
+        def __new__(cls):
+            return Preprocessor.normalize_text
+
+    class SeparatePunctuations(object):
+
+        def __init__(self):
+            pass
+        
+        def __new__(cls):
+            return Preprocessor.saparate_punctuations
+    
+    class ReplaceApostrophes(object):
+
+        def __init__(self):
+            pass
+        
+        def __new__(cls):
+            return Preprocessor.replace_apostrophes

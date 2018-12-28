@@ -18,6 +18,7 @@ import codecs
 import copy as cp
 from functools import reduce
 from collections import Counter
+import string
 
 
 class Preprocessor:
@@ -54,6 +55,13 @@ class Preprocessor:
 
         return re.sub(r'[^\w\s]', '', text) 
     
+    @staticmethod
+    def saparate_punctuations(text):
+        for punc in string.punctuation:
+            text = text.replace(punc, ' ' + punc)
+        
+        return text
+
     @staticmethod
     def remove_custom_chars(text, chars_list):
         if isinstance(text, list):
