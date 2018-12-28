@@ -45,7 +45,7 @@ class TextTransformations(object):
             pass
 
         def __new__(cls, size):
-            return functools.partial(Preprocessor.word_based_pad, size)
+            return functools.partial(Preprocessor.word_based_pad, size=size)
     
     class WordTruncate(object):
 
@@ -53,4 +53,4 @@ class TextTransformations(object):
             pass
 
         def __new__(cls, size):
-            return functools.partial(Preprocessor.word_based_truncate, size)
+            return functools.partial(Preprocessor.word_based_truncate, size=size)
