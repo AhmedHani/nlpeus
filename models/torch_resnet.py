@@ -30,6 +30,13 @@ class TorchResNet2D(nn.Module):
     def __init__(self, input_size, output_size, n_blocks=2, device='cpu'):
         super().__init__()
         
+        self.kwargs = {
+            'input_size': input_size,
+            'output_size': output_size,
+            'n_blocks': n_blocks,
+            'device': device
+        }
+
         if len(input_size) == 2:
             input_size.insert(0, 1)
 

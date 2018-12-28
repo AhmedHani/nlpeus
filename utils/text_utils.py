@@ -546,6 +546,9 @@ class TextEncoder(object):
 
     def encode(self, text):
         return self.model.encode(text)
+    
+    def encoding_size(self):
+        return self.model.encoding_size()
 
 
 class _WordEmbeddingLoader(object):
@@ -588,6 +591,7 @@ class _WordEmbeddingLoader(object):
 
     def __load_embeddings(self, model_name):
         # floydhub input path support
+        print('begin loading {} embedding'.format(model_name))
 
         if model_name == 'word2vec':
             try:
@@ -614,6 +618,9 @@ class _WordEmbeddingLoader(object):
         print(model_name, "Loaded!")
         print('Vocab Size', self.__vocab_size)
         print('Embedding Dim', self.__embedding_size)
+    
+    def encoding_size(self):
+        return self.__embedding_size
 
     @staticmethod
     def __load_word2vec_model(fname):
@@ -683,7 +690,6 @@ class _WordEmbeddingLoader(object):
 
                 if word not in word_vecs:
                     word_vecs[word] = vec
-                break
 
         return word_vecs, len(word_vecs), 300
 

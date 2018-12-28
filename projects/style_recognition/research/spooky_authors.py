@@ -65,7 +65,7 @@ word2index, index2word = dataset_analyzer.get_words_ids(min_freqs=min_wordsfreq)
 batcher = Batcher(data=dp.train_data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
 text_encoder = TextEncoder(char2indexes=char2index, modelname='glove')
 
-model = TorchResNet2D(input_size=[max_wordslen, 300], output_size=len(class2index), device=device)
+model = TorchResNet2D(input_size=[max_wordslen, text_encoder.encoding_size()], output_size=len(class2index), device=device)
 
 experiment = SupervisedExperiment(
     total_samples=len(dp.train_data) + len(dp.test_data),
