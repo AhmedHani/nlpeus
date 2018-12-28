@@ -46,7 +46,7 @@ class TorchResNet2D(nn.Module):
 
         self.to(device)
     
-    def build(self, n_blocks, base_expansion=8):
+    def build(self, n_blocks, base_expansion=16):
         blocks = []
 
         cnn1 = nn.Sequential(
@@ -75,18 +75,18 @@ class TorchResNet2D(nn.Module):
             ))
 
             self.output_shape = self.__get_output_shape(input_dim=self.output_shape, 
-                                                        ochannels=base_expansion * 2, kernel_size=3,
-                                                        stride=1, padding=1, flatten=False)
-            base_expansion *= 2
+                                                        ochannels=base_expansion, kernel_size=3,
+                                                        stride=1, padding=1, flatten=False)        
         
-        avgpool = nn.AvgPool2d(kernel_size=2)
-        self.output_shape = self.__get_output_shape(input_dim=self.output_shape, ochannels=base_expansion / 2, kernel_size=2,
-                                                       stride=None, padding=0, flatten=True)
+        self.avgpool = nn.AvgPool2d(kernel_size=2)
+        self.output_shape = self.__get_output_shape(input_dim=self.output_shape, 
+                                                    ochannels=base_expansion, 
+                                                    kernel_size=2,
+                                                    stride=None, 
+                                                    padding=0, 
+                                                    flatten=True)
 
-        blocks.append(avgpool)
         self.output = nn.Linear(int(self.output_shape), self.output_size)
-        
-        blocks.append(self.output)
 
         return blocks
         
@@ -97,15 +97,16 @@ class TorchResNet2D(nn.Module):
         current = self.net[0](input)
         prev = current
 
-        for i in range(1, len(self.net) - 2):
+        for i in range(1, len(self.net)):
             current = self.net[i](current)
             current += prev
             current = nn.ReLU()(current)
 
             prev = current
         
-        current = self.net[-2](current)
-        current = self.net[-1](current)
+        current = self.avgpool(current)
+        current = current.view(current.size(0), -1)
+        current = self.output(current)
 
         output = F.log_softmax(current, dim=1)
 
@@ -117,15 +118,24 @@ class TorchResNet2D(nn.Module):
         return output.cpu().max(1)[1].data.numpy()
 
     def predict_probs(self, input):
-        input = torch.LongTensor(input).to(self.device)
-        batch_size = input.size(0)
+        input = torch.DoubleTensor(input).to(self.device).float()
+        input = input.view(input.size(0), self.input_channels, input.size(2), input.size(1))
 
-        encoded = self.encoder(input)
-        output, hidden = self.rnn(encoded, self.init_hidden(batch_size))
+        current = self.net[0](input)
+        prev = current
 
-        output = self.decoder(hidden[0].view(hidden[0].size(1), hidden[0].size(2)))
+        for i in range(1, len(self.net)):
+            current = self.net[i](current)
+            current += prev
+            current = nn.ReLU()(current)
 
-        output = F.softmax(output, dim=1)
+            prev = current
+        
+        current = self.avgpool(current)
+        current = current.view(current.size(0), -1)
+        current = self.output(current)
+
+        output = F.softmax(current, dim=1)
 
         return output.cpu().max(1)[0].data.numpy()
 
