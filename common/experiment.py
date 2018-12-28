@@ -167,6 +167,8 @@ class SupervisedExperiment(object):
                             X = transformation(X)
 
                     x_train = encoder.encode(X)
+                    #print(len(x_train))
+                    #print(len(x_train[0]))
 
                     if class2index is None:
                         y_train = Y

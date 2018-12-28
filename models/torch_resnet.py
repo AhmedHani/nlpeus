@@ -27,13 +27,14 @@ class TorchResBlock2D(nn.Module):
 
 class TorchResNet2D(nn.Module):
 
-    def __init__(self, input_size, output_size, n_blocks=4, device='cpu'):
+    def __init__(self, input_size, output_size, n_blocks=2, device='cpu'):
         super().__init__()
         
         if len(input_size) == 2:
             input_size.insert(0, 1)
 
         self.input_channels, self.height, self.wdith = input_size
+        self.output_size = output_size
 
         self.net = self.build(n_blocks)
 
@@ -45,7 +46,7 @@ class TorchResNet2D(nn.Module):
 
         self.to(device)
     
-    def build(self, n_blocks, base_expansion=64):
+    def build(self, n_blocks, base_expansion=8):
         blocks = []
 
         cnn1 = nn.Sequential(
@@ -56,20 +57,21 @@ class TorchResNet2D(nn.Module):
                 stride=1,
                 padding=1,
                 bias=False),
-            nn.BatchNorm2d(64),
-            nn.ReLU()) 
+            nn.BatchNorm2d(base_expansion),
+            nn.ReLU())
 
         blocks.append(cnn1)
 
         self.output_shape = self.__get_output_shape(input_dim=[self.input_channels, self.height, self.wdith],
                                                     ochannels=base_expansion, kernel_size=3, stride=1, padding=1, flatten=False)
-
+        
         for i in range(0, n_blocks):
             blocks.append(TorchResBlock2D(
                 in_map=base_expansion,
                 out_map=base_expansion * 2,
                 kernel_size=3,
-                stride=1
+                stride=1,
+                padding=1
             ))
 
             self.output_shape = self.__get_output_shape(input_dim=self.output_shape, 
@@ -82,14 +84,14 @@ class TorchResNet2D(nn.Module):
                                                        stride=None, padding=0, flatten=True)
 
         blocks.append(avgpool)
-        self.output = nn.Linear(self.output_shape, self.output_size)
+        self.output = nn.Linear(int(self.output_shape), self.output_size)
         
         blocks.append(self.output)
 
         return blocks
         
     def forward(self, input):
-        input = torch.from_numpy(input).to(self.device).float()
+        input = torch.DoubleTensor(input).to(self.device).float()
         input = input.view(input.size(0), self.input_channels, input.size(2), input.size(1))
 
         current = self.net[0](input)
@@ -107,7 +109,7 @@ class TorchResNet2D(nn.Module):
 
         output = F.log_softmax(current, dim=1)
 
-        return output
+        return output, current
     
     def predict_classes(self, input):
         output = self.forward(input)[0]

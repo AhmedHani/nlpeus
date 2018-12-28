@@ -16,6 +16,7 @@ import argparse
 from common.batcher import Batcher
 
 from models.torch_charnn import MultiCharRNN
+from models.torch_resnet import TorchResNet2D
 from common.trainer import SupervisedTrainer
 from common.transformations import TextTransformations
 from utils.text_utils import TextDatasetAnalyzer, TextEncoder, Preprocessor
@@ -62,7 +63,9 @@ char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
 word2index, index2word = dataset_analyzer.get_words_ids(min_freqs=min_wordsfreq)
 
 batcher = Batcher(data=dp.train_data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
-model = MultiCharRNN(input_size=len(word2index), output_size=len(class2index), device=device)
+text_encoder = TextEncoder(char2indexes=char2index, modelname='glove')
+
+model = TorchResNet2D(input_size=[max_wordslen, 300], output_size=len(class2index), device=device)
 
 experiment = SupervisedExperiment(
     total_samples=len(dp.train_data) + len(dp.test_data),
@@ -82,7 +85,6 @@ experiment.create(__file__)
 experiment.save_misc(fmt='json', author2index=class2index, index2author=index2class)
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
-text_encoder = TextEncoder(char2indexes=char2index, modelname='glove')
 
 transformations = TextTransformations(
     TextTransformations.WordPad(size=max_wordslen),

@@ -683,6 +683,7 @@ class _WordEmbeddingLoader(object):
 
                 if word not in word_vecs:
                     word_vecs[word] = vec
+                break
 
         return word_vecs, len(word_vecs), 300
 
