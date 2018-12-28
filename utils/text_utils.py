@@ -595,21 +595,21 @@ class _WordEmbeddingLoader(object):
                     './support/GoogleNews-vectors-negative300.bin')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_word2vec_model(
-                    '/floyd/input/data/word2vecgooglenewsvectors/GoogleNews-vectors-negative300.bin')
+                    '/floyd/input/word2vecgooglenewsvectors/GoogleNews-vectors-negative300.bin')
         elif model_name == 'fasttext':
             try:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
                     './support/crawl-300d-2M.vec')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
-                    '/floyd/input/data/fasttextcrawl300d2m/crawl-300d-2M.vec')
+                    '/floyd/input/fasttextcrawl300d2m/crawl-300d-2M.vec')
         elif model_name == 'glove':
             try:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
                     './support/glove.6B.300d.txt')
             except:
                 self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
-                    '/floyd/input/data/glove6b/glove.6B.300d.txt')
+                    '/floyd/input/glove6b/glove.6B.300d.txt')
 
         print(model_name, "Loaded!")
         print('Vocab Size', self.__vocab_size)
