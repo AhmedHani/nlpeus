@@ -605,10 +605,10 @@ class _WordEmbeddingLoader(object):
                     '/floyd/input/fasttextcrawl300d2m/crawl-300d-2M.vec')
         elif model_name == 'glove':
             try:
-                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_glove_model(
                     './support/glove.6B.300d.txt')
             except:
-                self.__model, self.__vocab_size, self.__embedding_size = self.__load_fasttext_model(
+                self.__model, self.__vocab_size, self.__embedding_size = self.__load_glove_model(
                     '/floyd/input/glove6b/glove.6B.300d.txt')
 
         print(model_name, "Loaded!")
@@ -665,6 +665,26 @@ class _WordEmbeddingLoader(object):
                 embedding_size = len(vec)
 
         return word_vecs, vocab_size, embedding_size
+
+    @staticmethod
+    def __load_glove_model(fname):
+        word_vecs = {}
+
+        with open(fname, 'r') as reader:
+            for line in reader:
+                line = line.strip().rstrip()
+
+                if line == "":
+                    continue
+
+                line_tokens = line.split(" ")
+                word = str(line_tokens[0])
+                vec = list(map(lambda v: float(v), line_tokens[1:]))
+
+                if word not in word_vecs:
+                    word_vecs[word] = vec
+
+        return word_vecs, len(word_vecs), 300
 
     def __getitem__(self, item):
         if item in self.__model:
