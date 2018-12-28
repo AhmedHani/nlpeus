@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='Style Recognition training playgro
 parser.add_argument('--batch_size', type=int, default=32, help='training batch size')
 parser.add_argument('--epochs', type=int, default=30, help='number of training epochs')
 parser.add_argument('--max-charslen', type=int, default=50, help='max chars length that will be fed to the network')
-parser.add_argument('--max-wordslen', type=int, default=10, help='max words length that will be fed to the network')
+parser.add_argument('--max-wordslen', type=int, default=30, help='max words length that will be fed to the network')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
 parser.add_argument('--min-wordsfreq', type=int, default=10, help='min words frequency to be considered')
 parser.add_argument('--min-charsfreq', type=int, default=100, help='min chars frequency to be considered')
@@ -59,9 +59,10 @@ dataset_analyzer = TextDatasetAnalyzer(data=dp.train_data, data_axis={'text': 1,
 #dataset_analyzer.all()
 
 char2index, index2char = dataset_analyzer.get_chars_ids(min_freqs=min_charsfreq)
+word2index, index2word = dataset_analyzer.get_words_ids(min_freqs=min_wordsfreq)
 
 batcher = Batcher(data=dp.train_data, batch_size=batch_size, with_shuffle=True, divide_train_valid_test=True)
-model = MultiCharRNN(input_size=len(char2index), output_size=len(class2index), device=device)
+model = MultiCharRNN(input_size=len(word2index), output_size=len(class2index), device=device)
 
 experiment = SupervisedExperiment(
     total_samples=len(dp.train_data) + len(dp.test_data),
@@ -72,7 +73,7 @@ experiment = SupervisedExperiment(
     epochs=epochs,
     batch_size=batch_size,
     number_classes=len(class2index),
-    input_length=max_charslen,
+    input_length=max_wordslen,
     device=device,
     author_name='A.H. Al-Ghidani'
 )
@@ -81,11 +82,11 @@ experiment.create(__file__)
 experiment.save_misc(fmt='json', author2index=class2index, index2author=index2class)
 
 trainer = SupervisedTrainer(model, classes=[class2index, index2class])
-text_encoder = TextEncoder(char2indexes=char2index, modelname='char_index')
+text_encoder = TextEncoder(char2indexes=char2index, modelname='word_embedding')
 
 transformations = TextTransformations(
-    TextTransformations.CharPad(size=max_charslen),
-    TextTransformations.CharTruncate(size=max_charslen)
+    TextTransformations.WordPad(size=max_wordslen),
+    TextTransformations.WordTruncate(size=max_wordslen)
 )
 
 experiment.run(trainer, 
