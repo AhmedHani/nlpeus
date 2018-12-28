@@ -2,6 +2,55 @@
 
 author: A.H. Al-Ghidani
 project: style_recognition
+date and time: 2018-12-28 20:38
+
+experiment setup:
+	 total training samples: 15662
+	 total validation samples: 1956
+	 total testing samples: 1956
+	 model: TorchResNet2D
+	 epochs: 30
+	 batch size: 32
+	 number of classes: 3
+	 input length: 30
+	 device: cpu
+
+
++-------------+------------+
+| class index | class name |
++-------------+------------+
+| class MWS   | 0          |
+| class EAP   | 1          |
+| class HPL   | 2          |
++-------------+------------+
+
+confusion matrix
++---------+---------+---------+---------+
+| --      | class 0 | class 1 | class 2 |
++---------+---------+---------+---------+
+| class 0 | 3       | 1       | 0       |
+| class 1 | 101     | 252     | 43      |
+| class 2 | 507     | 538     | 539     |
++---------+---------+---------+---------+
+
+accuracy: 0.4
+
++-----------+----------------------+---------------------+---------------------+
+| --        | class 0              | class 1             | class 2             |
++-----------+----------------------+---------------------+---------------------+
+| precision | 0.75                 | 0.6363636363636364  | 0.3402777777777778  |
+| recall    | 0.004909983633387889 | 0.3185840707964602  | 0.9261168384879725  |
+| fscore    | 0.00975609756097561  | 0.42459983150800334 | 0.49769159741458907 |
++-----------+----------------------+---------------------+---------------------+
+
+average fscore: 0.31068250882785603
+
+
+
+########### Experiment #2 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
 date and time: 2018-12-22 00:36
 
 experiment setup:
@@ -47,7 +96,7 @@ average fscore: 0.5190152229520774
 
 
 
-########### Experiment #2 ###########
+########### Experiment #3 ###########
 
 author: A.H. Al-Ghidani
 project: style_recognition
@@ -93,6 +142,55 @@ accuracy: 0.37
 +-----------+---------------------+---------------------+---------------------+
 
 average fscore: 0.33538734538502624
+
+
+
+########### Experiment #4 ###########
+
+author: A.H. Al-Ghidani
+project: style_recognition
+date and time: 2018-12-28 19:48
+
+experiment setup:
+	 total training samples: 15662
+	 total validation samples: 1956
+	 total testing samples: 1956
+	 model: TorchResNet2D
+	 epochs: 30
+	 batch size: 32
+	 number of classes: 3
+	 input length: 30
+	 device: cpu
+
+
++-------------+------------+
+| class index | class name |
++-------------+------------+
+| class MWS   | 0          |
+| class EAP   | 1          |
+| class HPL   | 2          |
++-------------+------------+
+
+confusion matrix
++---------+---------+---------+---------+
+| --      | class 0 | class 1 | class 2 |
++---------+---------+---------+---------+
+| class 0 | 310     | 113     | 124     |
+| class 1 | 315     | 656     | 364     |
+| class 2 | 15      | 9       | 78      |
++---------+---------+---------+---------+
+
+accuracy: 0.526
+
++-----------+--------------------+---------------------+---------------------+
+| --        | class 0            | class 1             | class 2             |
++-----------+--------------------+---------------------+---------------------+
+| precision | 0.56672760511883   | 0.49138576779026216 | 0.7647058823529411  |
+| recall    | 0.484375           | 0.8431876606683805  | 0.13780918727915195 |
+| fscore    | 0.5223251895534963 | 0.620918125887364   | 0.23353293413173656 |
++-----------+--------------------+---------------------+---------------------+
+
+average fscore: 0.4589254165241989
 
 
 

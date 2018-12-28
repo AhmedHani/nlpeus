@@ -521,6 +521,12 @@ class TextDatasetAnalyzer:
         freqs_format = '\n'.join(['\t\t' + str(key) + ': ' + str(value) for key, value in classes])
         self.out.write('classes frequencies: \n{}\n\n'.format(freqs_format))
 
+    def n_words_per_instance_per_class(self):
+        unique_classes = set(self.labels)
+        classes_words_per_instance = {}
+        pass
+
+
     @staticmethod
     def __set_output_location(outpath):
         if outpath == 'stdout':
