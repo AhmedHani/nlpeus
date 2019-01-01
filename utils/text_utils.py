@@ -15,10 +15,10 @@ import os
 import re
 import sys
 import codecs
+import string
 import copy as cp
 from functools import reduce
 from collections import Counter
-import string
 
 
 class Preprocessor:
@@ -304,7 +304,7 @@ class TextAnalyzer:
 
 class TextDatasetAnalyzer:
 
-    def __init__(self, data, data_axis, outpath='stdout', visualize=False):
+    def __init__(self, data, data_axis, outpath='stdout', vispath=None):
         if isinstance(data_axis['text'], int):
             self.data = [item[data_axis['text']] for item in data]
         else:
@@ -315,13 +315,15 @@ class TextDatasetAnalyzer:
             
         self.labels = [item[data_axis['label']] for item in data]
 
+        if vispath is not None:
+            self.vispath = self.__set_visualization_dir(vispath)
+            self.plotter = self.__get_visualizer()
+
         if outpath is not None:
             self.out = self.__set_output_location(outpath)
             
             self.all()
-        
-        self.do_visualize = visualize
-        
+                
     def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
                   n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True,
                   n_words_per_instance_per_class=True, n_unique_words_per_class=True, n_chars_per_instance_per_class=True,
@@ -707,6 +709,19 @@ class TextDatasetAnalyzer:
             raise Exception('file {} not existed!'.format(outpath))
         
         return codecs.open(outpath, 'w', encoding='utf-8')
+    
+    @staticmethod
+    def __set_visualization_dir(vispath):
+        if not os.path.exists(vispath):
+            os.mkdir(vispath)
+        
+        return vispath
+    
+    @staticmethod
+    def __get_visualizer():
+        import matplotlib.pyplot as plt
+
+        return plt
 
 
 class TextEncoder(object):
