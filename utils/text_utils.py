@@ -532,8 +532,145 @@ class TextDatasetAnalyzer:
         for item in classes_words_per_instance.items():
             self.out.write('class {} words per instance: {}\n'.format(item[0], ' '.join(item[1])))
 
+    def n_unique_words_per_class(self):
+        unique_classes = set(self.labels)
+        n_unique_per_class = {}
 
+        for class_ in unique_classes:
+            unique_words = set()
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
 
+            for current_instance in class_data:
+                for word in current_instance.split():
+                    unique_words.add(word)
+            
+            n_unique_per_class[class_] = len(unique_words)
+            del unique_words
+        
+        for item in n_unique_per_class.items():
+            self.out.write('class {} number of unique words: {}\n'.format(item[0], ' '.join(item[1])))
+    
+    def n_characters_per_instance_per_class(self):
+        unique_classes = set(self.labels)
+        classes_chars_per_instance = {}
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            classes_chars_per_instance[class_] = [len(list(current_instance)) for current_instance in class_data]
+        
+        for item in classes_chars_per_instance.items():
+            self.out.write('class {} chars per instance: {}\n'.format(item[0], ' '.join(item[1])))
+
+    def n_stop_words(self):
+        unique_classes = set(self.labels)
+        classes_words_per_instance = {}
+
+        nltk_stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll",
+                            "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 
+                            'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 
+                            'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 
+                            'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 
+                            'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 
+                            'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 
+                            'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 
+                            'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 
+                            'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 
+                            'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 
+                            'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', 
+                            "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 
+                            'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't", 'I']
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            
+            n_stop_words = []
+
+            for current_instance in class_data:
+                c = 0
+
+                for word in current_instance.split():
+                    if word in nltk_stop_words:
+                        c += 1
+                
+                n_stop_words.append(c)
+
+            classes_words_per_instance[class_] = n_stop_words
+        
+        for item in classes_words_per_instance.items():
+            self.out.write('class {} words per instance: {}\n'.format(item[0], ' '.join(item[1])))
+
+    def n_punctuations_per_instance_per_class(self):
+        unique_classes = set(self.labels)
+        classes_punc_per_instance = {}
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            
+            n_punc = []
+
+            for current_instance in class_data:
+                c = 0
+                for word in current_instance.split():
+                    for char in word:
+                        if char in string.punctuation:
+                            c += 1
+                
+                n_punc.append(c)
+
+            classes_punc_per_instance[class_] = n_punc
+        
+        for item in classes_punc_per_instance.items():
+            self.out.write('class {} punctuations per instance: {}\n'.format(item[0], ' '.join(item[1])))
+
+    def n_upper_per_instance_per_class(self):
+        unique_classes = set(self.labels)
+        classes_upper_per_instance = {}
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            
+            n_upper = []
+
+            for current_instance in class_data:
+                c = 0
+                for word in current_instance.split():
+                    if word.isupper():
+                        c += 1
+                
+                n_upper.append(c)
+
+            classes_upper_per_instance[class_] = n_upper
+        
+        for item in classes_upper_per_instance.items():
+            self.out.write('class {} number of uppercase per instance: {}\n'.format(item[0], ' '.join(item[1])))
+
+    def n_title_per_instance_per_class(self):
+        unique_classes = set(self.labels)
+        classes_title_per_instance = {}
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            
+            n_title = []
+
+            for current_instance in class_data:
+                c = 0
+                for word in current_instance.split():
+                    if word.istitle():
+                        c += 1
+                
+                n_title.append(c)
+
+            classes_title_per_instance[class_] = n_upper
+        
+        for item in classes_title_per_instance.items():
+            self.out.write('class {} number of titlecase per instance: {}\n'.format(item[0], ' '.join(item[1])))
 
     @staticmethod
     def __set_output_location(outpath):
