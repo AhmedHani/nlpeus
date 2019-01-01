@@ -320,7 +320,6 @@ class TextDatasetAnalyzer:
             
             self.all()
         
-    
     def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
                   n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True):
         average_words, average_chars = 0, 0
@@ -524,7 +523,16 @@ class TextDatasetAnalyzer:
     def n_words_per_instance_per_class(self):
         unique_classes = set(self.labels)
         classes_words_per_instance = {}
-        pass
+        
+        for class_ in unique_classes:
+            class_indices = [i for i, label in enumerate(self.labels) if label == class_]
+            class_data = [self.data[index] for index in class_indices]
+            classes_words_per_instance[class_] = [len(current_instance.split()) for current_instance in class_data]
+        
+        for item in classes_words_per_instance.items():
+            self.out.write('class {} words per instance: {}\n'.format(item[0], ' '.join(item[1])))
+
+
 
 
     @staticmethod
