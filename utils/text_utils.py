@@ -20,6 +20,10 @@ import copy as cp
 from functools import reduce
 from collections import Counter
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(style="darkgrid")
+
 
 class Preprocessor:
 
@@ -317,7 +321,6 @@ class TextDatasetAnalyzer:
 
         if vispath is not None:
             self.vispath = self.__set_visualization_dir(vispath)
-            self.plotter = self.__get_visualizer()
 
         if outpath is not None:
             self.out = self.__set_output_location(outpath)
@@ -716,12 +719,6 @@ class TextDatasetAnalyzer:
             os.mkdir(vispath)
         
         return vispath
-    
-    @staticmethod
-    def __get_visualizer():
-        import matplotlib.pyplot as plt
-
-        return plt
 
 
 class TextEncoder(object):
