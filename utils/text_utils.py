@@ -304,7 +304,7 @@ class TextAnalyzer:
 
 class TextDatasetAnalyzer:
 
-    def __init__(self, data, data_axis, outpath='stdout'):
+    def __init__(self, data, data_axis, outpath='stdout', visualize=False):
         if isinstance(data_axis['text'], int):
             self.data = [item[data_axis['text']] for item in data]
         else:
@@ -320,8 +320,13 @@ class TextDatasetAnalyzer:
             
             self.all()
         
+        self.do_visualize = visualize
+        
     def all(self, n_instances=True, avg_n_words=True, avg_n_chars=True, n_unique_words=True,
-                  n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True):
+                  n_unique_chars=True, words_freqs=True, chars_freqs=True, n_samples_per_class=True,
+                  n_words_per_instance_per_class=True, n_unique_words_per_class=True, n_chars_per_instance_per_class=True,
+                  n_stop_words_per_class=True, n_punct_per_instance_per_class=True, n_upper_per_instance_per_class=True,
+                  n_title_per_instance_per_class=True):
         average_words, average_chars = 0, 0
         words, chars = {}, {}
 
@@ -376,6 +381,27 @@ class TextDatasetAnalyzer:
 
             freqs_format = '\n'.join(['\t\t' + key + ': ' + str(value) for key, value in chars])
             self.out.write('chars frequencies: \n{}\n\n'.format(freqs_format))
+
+        if n_words_per_instance_per_class:
+            self.n_words_per_instance_per_class()
+        
+        if n_unique_words_per_class:
+            self.n_unique_words_per_class()
+        
+        if n_chars_per_instance_per_class:
+            self.n_chars_per_instance_per_class()
+        
+        if n_stop_words_per_class:
+            self.n_stop_words_per_class()
+        
+        if n_punct_per_instance_per_class:
+            self.n_punct_per_instance_per_class()
+        
+        if n_upper_per_instance_per_class:
+            self.n_upper_per_instance_per_class()
+        
+        if n_title_per_instance_per_class:
+            self.n_title_per_instance_per_class()
 
     def n_instances(self):
         self.out.write('number of instances: {}\n'.format(len(self.data)))
@@ -551,7 +577,7 @@ class TextDatasetAnalyzer:
         for item in n_unique_per_class.items():
             self.out.write('class {} number of unique words: {}\n'.format(item[0], ' '.join(item[1])))
     
-    def n_characters_per_instance_per_class(self):
+    def n_chars_per_instance_per_class(self):
         unique_classes = set(self.labels)
         classes_chars_per_instance = {}
         
@@ -563,7 +589,7 @@ class TextDatasetAnalyzer:
         for item in classes_chars_per_instance.items():
             self.out.write('class {} chars per instance: {}\n'.format(item[0], ' '.join(item[1])))
 
-    def n_stop_words(self):
+    def n_stop_words_per_class(self):
         unique_classes = set(self.labels)
         classes_words_per_instance = {}
 
@@ -602,7 +628,7 @@ class TextDatasetAnalyzer:
         for item in classes_words_per_instance.items():
             self.out.write('class {} words per instance: {}\n'.format(item[0], ' '.join(item[1])))
 
-    def n_punctuations_per_instance_per_class(self):
+    def n_punct_per_instance_per_class(self):
         unique_classes = set(self.labels)
         classes_punc_per_instance = {}
         
@@ -667,7 +693,7 @@ class TextDatasetAnalyzer:
                 
                 n_title.append(c)
 
-            classes_title_per_instance[class_] = n_upper
+            classes_title_per_instance[class_] = n_title
         
         for item in classes_title_per_instance.items():
             self.out.write('class {} number of titlecase per instance: {}\n'.format(item[0], ' '.join(item[1])))
